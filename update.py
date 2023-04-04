@@ -5,3 +5,13 @@ class Update:
         self.__update_detail = update_detail
         self.__update_image = update_image
         self.__likes = likes
+
+    def get_update_detail(self):
+        update_detail = {
+            "update_title": self.__update_title,
+            "update_creator": self.__update_creator,
+            "update_detail": self.__update_detail,
+            "update_image": self.__update_image,
+            "likes": self.__likes,
+        }
+        return update_detail
