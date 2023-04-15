@@ -1,29 +1,39 @@
+from user import User
+from project import Project
+
 class System:
-    def __init__(self, project_list, launched_projects, user_list):
-        self.__project_list = project_list
-        self.__launched_projects = launched_projects
-        self.__user_list = user_list
+    def __init__(self):
+        self.__project_list = []
+        self.__launched_projects = []
+        self.__user_list = []
 
-    def delete_project(self, Project, user_password):
-        pass
+    def delete_project(self, project_id):
+        for project in self.__launched_projects:
+            if project_id == project.id:
+                self.__launched_projects.remove(project)
+                return "remove successfully"
 
-    def launch_project(self, Project):
-        pass
+    def add_project(self, project_name, category, project_image, project_duration, project_detail, project_creator_id):
+        self.__project_list.append(Project(project_name, category, project_image, project_duration, project_detail, project_creator_id))
 
-    def check_project_payment_detail(self, Project):
-        pass
+    def add_project(self, project):
+        self.__project_list.append(project)
 
-    def search_project(self, keyword, category):
-        pass
+    def launch_project(self, project):
+        if isinstance(project, Project):
+            self.__launched_projects.append(project)
 
-    def create_notification(self):
-        pass
+    def add_user(self, gmail, password, name, avatar, biography, location, website):
+        self.__user_list.append(User(gmail, password, name, avatar, biography, location, website))
 
-    def get_project_list(self):
-        pass
+    def add_user(self, user):
+        if isinstance(user, User):
+            self.__user_list.append(user)
 
-    def get_launched_projects(self):
-        pass
+    def get_user_by_id(self, id):
+        for user in self.__user_list:
+            if id == user.id:
+                return user
 
     @property
     def project_list(self):
@@ -32,3 +42,7 @@ class System:
     @property
     def launched_projects(self):
         return self.__launched_projects
+    
+    @property
+    def user_list(self):
+        return self.__user_list
