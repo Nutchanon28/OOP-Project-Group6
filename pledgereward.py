@@ -1,7 +1,12 @@
 class PledgeReward:
+    id_counter = 1
+
     def __init__(
         self, reward_goal, reward_name, reward_detail, reward_include, reward_left
     ):
+        self.id = PledgeReward.id_counter
+        PledgeReward.id_counter += 1
+
         self.__reward_goal = reward_goal
         self.__reward_name = reward_name
         self.__reward_detail = reward_detail
@@ -11,6 +16,7 @@ class PledgeReward:
 
     def get_reward_detail(self):
         reward_detail = {
+            "id": self.id,
             "reward_goal": self.__reward_goal,
             "reward_name": self.__reward_name,
             "reward_detail": self.__reward_detail,
@@ -43,4 +49,7 @@ class PledgeReward:
     def reward_left(self):
         return self.__reward_left
 
-    # @reward_left
+    @reward_left.setter
+    def reward_left(self, new_reward_left):
+        if isinstance(new_reward_left, int) and new_reward_left >= 0:
+            self.__reward_left = new_reward_left

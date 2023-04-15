@@ -4,6 +4,7 @@ from typing import Union
 from project import Project
 from system import System
 from user import User
+from creditCardTransaction import CreditCardTransaction
 
 import json
 from datetime import datetime
@@ -48,7 +49,11 @@ project_vr_game.add_reward(
     50, "Early Access", "Be one of the first to play our game!", "None", 200
 )
 project_vr_game.add_reward(
-    100, "Custom Character", "Create your own character to use in the game!", "None", 100
+    100,
+    "Custom Character",
+    "Create your own character to use in the game!",
+    "None",
+    100,
 )
 system.launch_project(project_vr_game)
 
@@ -88,6 +93,11 @@ project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 
 # John lauched the project
 system.launch_project(project_clean_air)
 
+# country, cvc, expiration, card number
+user_jame.add_payment_method("Thailand", "000", "06/25", "420694206928")
+user_jame.add_payment_method("Thailand", "001", "06/25", "320694206928")
+user_jame.add_payment_method("Thailand", "002", "06/25", "220694206928")
+
 app = FastAPI()
 
 
@@ -100,7 +110,18 @@ def read_root():
 async def get_all_project() -> list:
     # SD: View All Project
     projects = system.launched_projects
-    projects_detail = [project.get_project_detail() for project in projects]
+    # projects_detail = [project.get_project_detail() for project in projects]
+    projects_detail = []
+    for project in projects:
+        projects_detail.append(
+            {
+                "id": project.id,
+                "name": project.project_name,
+                "image": project.project_image,
+                "detail": project.project_detail,
+                "category": project.category,
+            }
+        )
     return projects_detail
 
 
@@ -114,11 +135,14 @@ async def get_project(project_id: int) -> dict:
 
 
 @app.get("/search_project", tags=["View Project"])
-async def search_project(keyword: Union[str, None] = "", category: Union[str, None] = "all") -> list:
+async def search_project(
+    keyword: Union[str, None] = "", category: Union[str, None] = "all"
+) -> list:
     # SD: Search Project
     searched_projects = system.search_project(keyword, category)
     projects_detail = [project.get_project_detail() for project in searched_projects]
     return projects_detail
+
 
 @app.post("/send_comment/{project_id}", tags=["Send Comment"])
 async def send_comment(project_id: int, text: str, user_id: int) -> str:
@@ -127,3 +151,34 @@ async def send_comment(project_id: int, text: str, user_id: int) -> str:
     selected_project = system.get_project_from_id(project_id)
     selected_project.create_comment(datetime.now(), text, current_user.name)
     return "successful"
+
+
+@app.post("/show_payment_requirements", tags=["Back the Project"])
+async def show_payment_requirements(project_id: int, user_id: int) -> dict:
+    # SD: Back the Project
+    current_user = system.get_user_from_id(user_id)
+    selected_project = system.get_project_from_id(project_id)
+    project_detail = selected_project.get_project_detail()
+
+    # This returns an entire CreditCardTransaction class, not sure if it will work
+    payment_methods = current_user.payment_methods
+    return {"project_detail": project_detail, "payment_methods": payment_methods}
+
+
+@app.post("/back_the_project", tags=["Back the Project"])
+async def back_the_project(
+    project_id: int,
+    user_id: int,
+    reward_id: int,
+    credit_card_id: int,
+    bonus_cost: Union[int, None] = 0,
+) -> dict:
+    # SD: Back the Project
+    current_user = system.get_user_from_id(user_id)
+    selected_project = system.get_project_from_id(project_id)
+    credit_card = current_user.get_credit_card_from_id(credit_card_id)
+    reward = selected_project.get_reward_from_id(reward_id)
+    response = current_user.back_project(
+        selected_project, credit_card, reward, bonus_cost
+    )
+    return {"response": response}

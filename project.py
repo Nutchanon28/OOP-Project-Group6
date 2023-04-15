@@ -32,17 +32,14 @@ class Project:
 
     def add_backing(self, backing):
         self.__backings.append(backing)
-        self.pledge_received(
-            self.pledge_received
-            + backing.pledge_reward.reward_goal
-            + backing.bonus_cost
-        )
-        backing.pledge_reward.reward_left(backing.pledge_reward.reward_left - 1)
+        self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
+        backing.reward_item.reward_left = backing.reward_item.reward_left - 1
         # for pledge_reward in self.__pledge_rewards:
         #     if pledge_reward.reward_name == backing.reward_item.reward_name:
         #         pledge_reward.reward_left(pledge_reward.reward_left - 1)
         # if make_payment(credit_card, pledge_reward.reward_goal) == "successful":
 
+    # set_pledge_reward
     def add_reward(
         self, reward_goal, reward_name, reward_detail, reward_include, reward_left
     ):
@@ -56,6 +53,8 @@ class Project:
             "name": self.__project_name,
             "image": self.__project_image,
             "detail": self.__project_detail,
+            "category": self.__category,
+            "pledge_received": self.__pledge_received
         }
         # creator_detail = self.__project_creator.get_creator_detail() # require Project to have User as an attribute
         # project need to keep user's id instead of creator instance
@@ -119,6 +118,12 @@ class Project:
         self.__updates.append(new_update)
         # print(f"title: {new_update.update_title} \ncreator: {new_update.update_creator} \ndetail: {new_update.update_detail} \nimage: {new_update.update_image}")
         return "finished add update"
+    
+    def get_reward_from_id(self, id):
+        for pledge_reward in self.__pledge_rewards:
+            if pledge_reward.id == id:
+                return pledge_reward
+        return "reward not found"
 
     @property
     def pledge_reward(self):
@@ -161,3 +166,7 @@ class Project:
     def pledge_received(self, new_value):
         if isinstance(new_value, int) and new_value >= 0:
             self.__pledge_received = new_value
+
+    @property
+    def project_detail(self):
+        return self.__project_detail
