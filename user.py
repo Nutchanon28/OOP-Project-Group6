@@ -1,20 +1,33 @@
 class User:
-    def __init__(self, account, message, payment_method, name, avatar, biography, location, time_zone, vanity_url, website, addresses, following, followers, blocked, notification):
-        self.__account = account
-        self.__message = message
-        self.__payment_method = payment_method
+    id_counter = 1
+
+    def __init__(self, name, avatar, biography, location, website):
+        self.id = User.id_counter
+        User.id_counter += 1
+
         self.__name = name
         self.__avatar = avatar
         self.__biography = biography
         self.__location = location
-        self.__time_zone = time_zone
-        self.__vanity_url = vanity_url
         self.__website = website
-        self.__addresses = addresses
-        self.__following = following
-        self.__followers = followers
-        self.__blocked = blocked
-        self.__notification = notification
+        self.__backings = []
+        self.__notifications = []
+
+    # user's method (view project)
+    def get_creator_detail(self):
+        # creator (User) is keep in System, but also here ??
+        creator_detail = {
+            "name": self.__name,
+            "avatar": self.__avatar,
+            "biography": self.__biography,
+            "location": self.__location,
+            "website": self.__website
+        }
+        return creator_detail
+    
+    @property
+    def name(self):
+        return self.__name
         
     @property
     def notification(self):
@@ -38,4 +51,3 @@ class User:
     
     def add_address(self, country, address_nickname, full_name, address, city, phone_number):
         pass
-
