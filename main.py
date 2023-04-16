@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from typing import Union
+from fastapi.middleware.cors import CORSMiddleware
 
 from project import Project
 from system import System
@@ -87,6 +88,91 @@ project_clean_air = Project(
     user_john,
 )
 
+# Green Energy for All
+project_green_energy = Project(
+    "Green Energy for All",
+    "Technology",
+    "green-energy.jpg",
+    "5/1/2023 - 12/31/2023",
+    "Join us in our mission to create sustainable energy solutions for everyone. Our team of experts is developing innovative technologies that will revolutionize the way we generate and consume energy.",
+    user_john  # User object representing the project creator
+)
+
+system.launch_project(project_green_energy)
+
+# Artificial Intelligence for Business
+project_ai_business = Project(
+    "Artificial Intelligence for Business",
+    "Business",
+    "ai-business.jpg",
+    "6/1/2023 - 11/30/2023",
+    "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams.",
+    user_alice  # User object representing the project creator
+)
+
+system.launch_project(project_ai_business)
+
+# Music Festival in the Park
+project_music_festival = Project(
+    "Music Festival in the Park",
+    "Music",
+    "music-festival.jpg",
+    "7/15/2023 - 7/17/2023",
+    "Join us for a weekend of live music, food, and fun in the park! Our lineup features local and national acts across a variety of genres, and all proceeds will go towards supporting the park's maintenance and community programs.",
+    user_bob  # User object representing the project creator
+)
+
+system.launch_project(project_music_festival)
+
+# Open Source Educational Software
+project_oss_edu = Project(
+    "Open Source Educational Software",
+    "Education",
+    "oss-edu.jpg",
+    "8/1/2023 - 12/31/2023",
+    "We believe that education should be accessible to everyone. That's why we're developing a suite of open source educational software that anyone can use, modify, and share. Join us in our mission to democratize learning!",
+    user_jame  # User object representing the project creator
+)
+
+system.launch_project(project_oss_edu)
+
+# Sustainable Clothing Line
+project_sustainable_clothing = Project(
+    "Sustainable Clothing Line",
+    "Fashion",
+    "sustainable-clothing.jpg",
+    "9/1/2023 - 2/28/2024",
+    "Fast fashion is taking a toll on our planet. That's why we're launching a sustainable clothing line made from eco-friendly materials and manufactured using ethical practices. Help us make fashion more sustainable!",
+    user_alice  # User object representing the project creator
+)
+
+system.launch_project(project_sustainable_clothing)
+
+# Community Garden
+project_community_garden = Project(
+    "Community Garden",
+    "Food",
+    "community-garden.jpg",
+    "10/1/2023 - 12/31/2023",
+    "We're transforming an empty lot in the heart of the city into a vibrant community garden. Our vision is to create a space where anyone can come to grow, learn, and connect with their neighbors. Join us in creating a more sustainable and connected community!",
+    user_bob  # User object representing the project creator
+)
+
+system.launch_project(project_community_garden)
+
+# Mental Health Chatbot
+project_mental_health_chatbot = Project(
+    "Mental Health Chatbot",
+    "Health",
+    "mental-health-chatbot.jpg",
+    "11/1/2023 - 4/30/2024",
+    "Mental health is just as important as physical health, but many people still struggle to access the care they need. That's why we're creating a chatbot that provides personalized mental health support and resources to anyone who needs it. Help us break down barriers to care!",
+    user_bob  # User object representing the project creator
+)
+
+system.launch_project(project_mental_health_chatbot)
+
+
 # John added a reward
 project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100)
 
@@ -100,6 +186,17 @@ user_jame.add_payment_method("Thailand", "002", "06/25", "220694206928")
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
