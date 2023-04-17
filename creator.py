@@ -20,19 +20,10 @@ class Creator(User):
     def location(self):
         return self.__location
     
-    def add_to_followed_list(self, Backer):
-        pass
-    
-    def remove_from_followed_list(self, Backer):
-        pass
-    
     def edit_project():
         pass
     
     def view_setting():
-        pass
-    
-    def message_user():
         pass
     
     def add_update():
