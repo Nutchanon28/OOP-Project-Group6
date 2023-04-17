@@ -45,6 +45,7 @@ project_vr_game = Project(
     "12-4-2023",
     "Experience a new dimension of gaming with our immersive virtual reality game!",
     user_alice,
+    10000
 )
 project_vr_game.add_reward(
     50, "Early Access", "Be one of the first to play our game!", "None", 200
@@ -65,6 +66,7 @@ project_travel_blog = Project(
     "15-5-2023",
     "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!",
     user_bob,
+    5000
 )
 project_travel_blog.add_reward(
     25, "Travel Tips Ebook", "Learn our secrets for budget travel!", "digital", 500
@@ -86,6 +88,7 @@ project_clean_air = Project(
     "11-4-2023",
     "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath.",
     user_john,
+    3300
 )
 
 # Green Energy for All
@@ -95,7 +98,8 @@ project_green_energy = Project(
     "green-energy.jpg",
     "5/1/2023 - 12/31/2023",
     "Join us in our mission to create sustainable energy solutions for everyone. Our team of experts is developing innovative technologies that will revolutionize the way we generate and consume energy.",
-    user_john  # User object representing the project creator
+    user_john,
+    7500
 )
 
 system.launch_project(project_green_energy)
@@ -107,7 +111,8 @@ project_ai_business = Project(
     "ai-business.jpg",
     "6/1/2023 - 11/30/2023",
     "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams.",
-    user_alice  # User object representing the project creator
+    user_alice,
+    3200
 )
 
 system.launch_project(project_ai_business)
@@ -119,7 +124,8 @@ project_music_festival = Project(
     "music-festival.jpg",
     "7/15/2023 - 7/17/2023",
     "Join us for a weekend of live music, food, and fun in the park! Our lineup features local and national acts across a variety of genres, and all proceeds will go towards supporting the park's maintenance and community programs.",
-    user_bob  # User object representing the project creator
+    user_bob,
+    8800
 )
 
 system.launch_project(project_music_festival)
@@ -131,7 +137,8 @@ project_oss_edu = Project(
     "oss-edu.jpg",
     "8/1/2023 - 12/31/2023",
     "We believe that education should be accessible to everyone. That's why we're developing a suite of open source educational software that anyone can use, modify, and share. Join us in our mission to democratize learning!",
-    user_jame  # User object representing the project creator
+    user_jame,
+    6540
 )
 
 system.launch_project(project_oss_edu)
@@ -143,7 +150,8 @@ project_sustainable_clothing = Project(
     "sustainable-clothing.jpg",
     "9/1/2023 - 2/28/2024",
     "Fast fashion is taking a toll on our planet. That's why we're launching a sustainable clothing line made from eco-friendly materials and manufactured using ethical practices. Help us make fashion more sustainable!",
-    user_alice  # User object representing the project creator
+    user_alice,
+    3500
 )
 
 system.launch_project(project_sustainable_clothing)
@@ -155,7 +163,8 @@ project_community_garden = Project(
     "community-garden.jpg",
     "10/1/2023 - 12/31/2023",
     "We're transforming an empty lot in the heart of the city into a vibrant community garden. Our vision is to create a space where anyone can come to grow, learn, and connect with their neighbors. Join us in creating a more sustainable and connected community!",
-    user_bob  # User object representing the project creator
+    user_bob,
+    7700
 )
 
 system.launch_project(project_community_garden)
@@ -167,7 +176,8 @@ project_mental_health_chatbot = Project(
     "mental-health-chatbot.jpg",
     "11/1/2023 - 4/30/2024",
     "Mental health is just as important as physical health, but many people still struggle to access the care they need. That's why we're creating a chatbot that provides personalized mental health support and resources to anyone who needs it. Help us break down barriers to care!",
-    user_bob  # User object representing the project creator
+    user_bob,
+    1234
 )
 
 system.launch_project(project_mental_health_chatbot)

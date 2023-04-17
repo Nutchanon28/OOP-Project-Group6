@@ -14,6 +14,7 @@ class Project:
         project_duration,
         project_detail,
         project_creator,
+        pledge_goal
     ):
         self.id = Project.id_counter
         Project.id_counter += 1
@@ -24,6 +25,7 @@ class Project:
         self.__project_duration = project_duration
         self.__project_detail = project_detail
         self.__project_creator = project_creator
+        self.__pledge_goal = pledge_goal
         self.__pledge_received = 0
         self.__pledge_rewards = []
         self.__updates = []
@@ -54,7 +56,10 @@ class Project:
             "image": self.__project_image,
             "detail": self.__project_detail,
             "category": self.__category,
-            "pledge_received": self.__pledge_received
+            "pledge_received": self.__pledge_received,
+            "number_of_backers": len(self.__backings),
+            "pledge_goal": self.__pledge_goal,
+            "project_duration": self.__project_duration
         }
         # creator_detail = self.__project_creator.get_creator_detail() # require Project to have User as an attribute
         # project need to keep user's id instead of creator instance
