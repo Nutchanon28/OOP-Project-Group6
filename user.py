@@ -19,9 +19,11 @@ class User:
         self.__address_list = []
         self.__creditcard_list = []
 
-    def edit_user(self, gmail, password, name, avatar, biography, location, website):
+    def edit_account(self, gmail, password):
         self.gmail = gmail
         self.password = password
+
+    def edit_profile(self, name, avatar, biography, location, website):
         self.name = name
         self.avatar = avatar
         self.biography = biography

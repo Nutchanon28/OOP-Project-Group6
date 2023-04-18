@@ -8,7 +8,25 @@ import requests
 from typing import Optional
 from fastapi import FastAPI
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 system = System()
 pang = User("Janipang@gmail.com", "12345", "Pang", "pang.jpg", "Hello, my name is Pang.", "Bangkok, Thailand", "www.janipang.com")
@@ -27,9 +45,26 @@ user.create_creditcard("USA", "143", "20230101", "12341234122413")
 @app.get("/view_all_project", tags=["View Project"])
 async def get_all_project() -> list:
     projects = system.launched_projects
-    print("test")
-    print(projects)
     return projects
+
+@app.get("/get_user", tags=['user'])
+async def get_user(user_id: int):
+    user = system.get_user_by_id(user_id)
+    return user
+
+@app.put("/add_profile", tags=['profile'])
+async def add_profile(user_id: int, user: dict) -> str:
+    print(user)
+    the_user = system.get_user_by_id(user_id)
+    the_user.edit_profile(user["name"], user["avatar"], user["biography"], user["location"], user["website"])
+    return "edit profile success"
+
+@app.put("/add_account", tags=['account'])
+async def add_account(user_id: int, user: dict) -> str:
+    print(user)
+    the_user = system.get_user_by_id(user_id)
+    the_user.edit_account(user["gmail"], user["password"])
+    return "edit account success"
 
 @app.get("/get_creditcard", tags=['creditcard'])
 async def get_creditcard(user_id: int) -> list:
