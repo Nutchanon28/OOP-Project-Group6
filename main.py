@@ -227,6 +227,7 @@ async def get_all_project() -> list:
                 "image": project.project_image,
                 "detail": project.project_detail,
                 "category": project.category,
+                "creator":project.project_creator.name
             }
         )
     return projects_detail
@@ -246,6 +247,9 @@ async def search_project(
     keyword: Union[str, None] = "", category: Union[str, None] = "all"
 ) -> list:
     # SD: Search Project
+# async def search_project(input: dict) -> list:
+#     keyword = input["keyword"]
+#     category = input["category"]
     searched_projects = system.search_project(keyword, category)
     projects_detail = [project.get_project_detail() for project in searched_projects]
     return projects_detail
