@@ -1,7 +1,7 @@
 class PledgeReward:
     def __init__(self, reward_goal, reward_name, reward_detail, reward_include, reward_backers, max_reward_backers, reward_shipping, reward_id = 0):
         
-        self.id = reward_id
+        self.__id = reward_id
         
         self.__reward_goal = reward_goal
         self.__reward_name = reward_name
@@ -27,6 +27,10 @@ class PledgeReward:
     
     def add_reward_include(self, include):
         self.__reward_include.append(include)
+
+    @property
+    def id(self):
+        return self.__id
 
     @property
     def reward_goal(self):

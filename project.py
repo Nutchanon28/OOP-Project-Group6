@@ -114,6 +114,12 @@ class Project:
         self.__payment_detail = PaymentDetail(legal_first_name, legal_last_name, email_address,
                  date_of_birth, home_address, city, state, postal_code, phone_number, account_number, bank)
 
+    def delete_reward(self, reward_id):
+        for reward in self.__pledge_rewards:
+            if reward.id == reward_id:
+                self.__pledge_rewards.remove(reward)
+                return f"remove reward with id {reward_id} success!"
+
     @property
     def pledge_rewards(self):
         return self.__pledge_rewards

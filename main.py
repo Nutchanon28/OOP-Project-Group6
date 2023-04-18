@@ -38,21 +38,54 @@ user_bob = User(
 system.add_user(user_bob)
 
 project_vr_game = Project(
-    "Virtual Reality Game",
+    "Virtual Reality Game1",
     "gaming",
     "image",
-    "12-4-2023",
+    12,
     "description1",
     user_alice,
 )
 system.add_project(project_vr_game)
 system.launch_project(project_vr_game)
 
+project_vr_game2 = Project(
+    "Virtual Reality Game2",
+    "gaming",
+    "image",
+    13,
+    "description2",
+    user_alice,
+)
+system.add_project(project_vr_game2)
+system.launch_project(project_vr_game2)
+
+project_vr_game3 = Project(
+    "Virtual Reality Game3",
+    "gaming",
+    "image",
+    14,
+    "description3",
+    user_alice,
+)
+system.add_project(project_vr_game3)
+system.launch_project(project_vr_game3)
+
+project_vr_game4 = Project(
+    "Virtual Reality Game4",
+    "gaming",
+    "image",
+    15,
+    "description4",
+    user_alice,
+)
+system.add_project(project_vr_game4)
+system.launch_project(project_vr_game4)
+
 project_travel_blog = Project(
     "Around the World Travel Blog",
     "travel",
     "image",
-    "15-5-2023",
+    16,
     "description2",
     user_bob,
 )
@@ -64,7 +97,7 @@ project_clean_air = Project(
     "clean air for all",
     "health",
     "image",
-    "11-4-2023",
+    17,
     "description3",
     user_john,
 )
@@ -114,26 +147,23 @@ async def get_all_user() -> list:
 async def get_all_project() -> list:
     # SD: View All Project
     projects = system.launched_projects
-    print("test")
-    print(projects)
-    projects_detail = [project.get_project_detail() for project in projects]
-    return projects_detail
+    return projects
 
 @app.get("/view_project_list", tags=["View Project"])
 async def get_project_list() -> list:
     projects = system.project_list
     return projects
 
-@app.get("/view_all_project/{id}", tags=["View Project"])
-async def get_project(id: int) -> dict:
-    project = system.get_project_from_id(id)
-    project_detail = project.get_project_detail()
-    return project_detail
 
-@app.get("/view_my_project", tags=["View Project"])
-async def get_my_project(creator_name: str) -> list:
+@app.get("/view_all_project/{id}", tags=["View Project"])
+async def get_project(id: int):
+    project = system.get_project_from_id(id)
+    return project
+
+@app.get("/view_my_project/{creator_id}", tags=["View Project"])
+async def get_my_project(creator_id: int) -> list:
     #เดี๋ยวเอาไว้ทำ luanch project
-    my_projects = system.get_my_projects(creator_name)
+    my_projects = system.get_my_projects(creator_id)
     return my_projects
 
 @app.get("/pledge_reward/{project_id}", tags=["Pledge Reward"])
@@ -152,6 +182,11 @@ async def get_lastest_id() -> dict:
 async def get_reward_id(project_id: int) -> dict:
     project = system.get_project_from_id(project_id)
     return {"id": str(len(project.pledge_rewards) + 1)}
+
+@app.get("/get_last_project")
+async def get_last_project():
+    project = system.project_list
+    return project[-1]
 
 @app.post("/add_project", tags=["Add Project"])
 async def add_the_project(project_dict: dict) -> int:
@@ -219,8 +254,22 @@ async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
     }
     """
     
-    reward_shipping = RewardShipping(pledge_reward["estimated_delivery"], pledge_reward["ships_to"], pledge_reward["address"], pledge_reward["shipping_cost"])
-    reward = PledgeReward(pledge_reward["reward_goal"], pledge_reward["reward_name"], pledge_reward["reward_detail"], pledge_reward["reward_include"], pledge_reward["reward_backers"], pledge_reward["max_reward_backers"], reward_shipping, int(pledge_reward["reward_id"]))
+    reward_shipping = RewardShipping(
+        pledge_reward["_RewardShipping__estimated_delivery"],
+        pledge_reward["_RewardShipping__ships_to"], 
+        pledge_reward["_RewardShipping__address"], 
+        pledge_reward["_RewardShipping__shipping_cost"]
+    )
+    reward = PledgeReward(
+        pledge_reward["_PledgeReward__reward_goal"],
+        pledge_reward["_PledgeReward__reward_name"], 
+        pledge_reward["_PledgeReward__reward_detail"], 
+        pledge_reward["_PledgeReward__reward_include"], 
+        pledge_reward["_PledgeReward__reward_backers"], 
+        pledge_reward["_PledgeReward__max_reward_backers"], 
+        reward_shipping, 
+        int(pledge_reward["reward_id"])
+        )
     project.add_reward(reward)
 
     return f"Add reward to project id {project_id}"
@@ -273,30 +322,31 @@ async def set_project_desscription(id: int, new_description: str) -> str:
 @app.put("/edit_project/{project_id}", tags=["Project"])
 async def edit_project(project_id: int, new_project: dict) -> str:
     #SD Edit Project
+    print(new_project)
     project = system.get_project_from_id(project_id)
-    project.project_name = new_project["project_name"]
-    project.category = new_project["category"]
-    project.project_image = new_project["project_image"]
-    project.project_duration = new_project["project_duration"]
-    project.project_detail = new_project["project_detail"]
-    project.pledge_goal = new_project["pledge_goal"]
+    project.project_name = new_project["_Project__project_name"]
+    project.category = new_project["_Project__category"]
+    project.project_image = new_project["_Project__project_image"]
+    project.project_duration = new_project["_Project__project_duration"]
+    project.project_detail = new_project["_Project__project_detail"]
+    project.pledge_goal = new_project["_Project__pledge_goal"]
     return f"The project with id {project_id} was edited!"
 
 @app.put("/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"])
 async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
     project = system.get_project_from_id(project_id)
     reward = project.get_reward_from_id(reward_id)
-    reward.reward_goal = new_reward["reward_goal"]
-    reward.reward_name = new_reward["reward_name"]
-    reward.reward_detail = new_reward["reward_detail"]
-    reward.reward_include = new_reward["reward_include"]
-    reward.reward_backers = new_reward["reward_backers"]
-    reward.max_reward_backers = new_reward["max_reward_backers"]
+    reward.reward_goal = int(new_reward["_PledgeReward__reward_goal"])
+    reward.reward_name = new_reward["_PledgeReward__reward_name"]
+    reward.reward_detail = new_reward["_PledgeReward__reward_detail"]
+    reward.reward_include = new_reward["_PledgeReward__reward_include"]
+    reward.reward_backers = int(new_reward["_PledgeReward__reward_backers"])
+    reward.max_reward_backers = int(new_reward["_PledgeReward__max_reward_backers"])
     reward.reward_shipping = RewardShipping(
-                    new_reward["estimated_delivery"],
-                    new_reward["ships_to"],
-                    new_reward["address"],
-                    new_reward["shipping_cost"]
+                    new_reward["_RewardShipping__estimated_delivery"],
+                    new_reward["_RewardShipping__ships_to"],
+                    new_reward["_RewardShipping__address"],
+                    int(new_reward["_RewardShipping__shipping_cost"])
                 )
     return "yessssssss"
     
@@ -307,17 +357,12 @@ async def launch_project(id: int) -> str:
     system.launch_project(project)
     return f"The project with id{id} was launched"
 
+@app.delete("/edit_project/{project_id}/delete_reward/{reward_id}", tags=["Pledge Reward"])
+async def edit_reward(project_id: int, reward_id: int) -> str:
+    project = system.get_project_from_id(project_id)
+    project.delete_reward(reward_id)
+    return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
 
-"""@app.get("/project-detail{project_id}", tags=['Projects'])
-async def get_project(project_id: str) -> dict:
-    return {"Data": projects}
 
-@app.post("/project-detail", tags=['Projects'])
-async def add_project(project: dict) -> dict:
-    
-    projects.append(project)
-    return {
-        "data": 'A Project is Added!'
-    }"""
 
 

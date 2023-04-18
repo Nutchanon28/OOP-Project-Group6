@@ -31,11 +31,12 @@ class System:
             if project.id == id:
                 return project
         return "project not found"
+    
     #rew : get creator's projects
-    def get_my_projects(self, creator_name):
+    def get_my_projects(self, creator_id):
         my_projects = []
-        for project in self.__launched_projects:
-            if project.project_creator.name == creator_name:
+        for project in self.__project_list:
+            if project.project_creator.id == creator_id:
                 my_projects.append(project)
 
         return my_projects
