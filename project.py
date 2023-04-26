@@ -61,8 +61,6 @@ class Project:
             "pledge_goal": self.__pledge_goal,
             "project_duration": self.__project_duration
         }
-        # creator_detail = self.__project_creator.get_creator_detail() # require Project to have User as an attribute
-        # project need to keep user's id instead of creator instance
         creator_detail = self.__project_creator.get_creator_detail()
 
         pledge_rewards_list = [
@@ -114,9 +112,8 @@ class Project:
         pass
       
     def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail ,update_image)
+        new_update = Update(self, update_title, update_creator, update_detail ,update_image)
         self.__updates.append(new_update)
-        print(f"title: {new_update.update_title} \ncreator: {new_update.update_creator} \ndetail: {new_update.update_detail} \nimage: {new_update.update_image}")
         return "finished add update"
     
     def create_comment(self, sending_time, text, writer):

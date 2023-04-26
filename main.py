@@ -79,7 +79,18 @@ project_travel_blog.add_reward(
     100,
 )
 system.launch_project(project_travel_blog)
-
+project_travel_blog.add_update(
+    "finished deal with publisher", 
+    user_bob, 
+    "make a big deal to print out 500 books in July in budget of 100 baht each", 
+    "publisher.png"
+)
+project_travel_blog.add_update(
+    "plan the place to go in July", 
+    user_bob, 
+    "70% of plan has finished even how much expen", 
+    "publisher.png"
+)
 # John create a project "clean air for all"
 project_clean_air = Project(
     "clean air for all",
