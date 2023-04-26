@@ -20,19 +20,20 @@ class System:
             if user.id == id:
                 return user
         return "user not found"
-    
+
     # system's method (view project)
     def get_project_from_id(self, id):
-        """for project in self.__launched_projects:
-            if project.id == id:
-                return project"""
-        #Rew
-        for project in self.__project_list:
+        for project in self.__launched_projects:
             if project.id == id:
                 return project
-        return "project not found"
-    
-    #rew : get creator's projects
+        # Rew
+        """for project in self.__project_list:
+            if project.id == id:
+                return project
+        return "project not found"""
+
+    # rew : get creator's projects
+
     def get_my_projects(self, creator_id):
         my_projects = []
         for project in self.__project_list:
@@ -74,7 +75,11 @@ class System:
     @property
     def project_list(self):
         return self.__project_list
-    
+
+    @property
+    def user_list(self):
+        return self.__user_list
+
     @property
     def user_list(self):
         return self.__user_list

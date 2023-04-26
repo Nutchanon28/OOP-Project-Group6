@@ -15,11 +15,11 @@ from datetime import datetime
 system = System()
 
 user_jame = User(
-    "Jame@gmail.com", "1234", "Jame", "face_photo", "Just a simple guy", "jame_project.com"
+    "Jame@gmail.com", "1234", "Jame", "face_photo", "Just a simple guy", "Thailand", "jame_project.com"
 )
 system.add_user(user_jame)
 user_john = User(
-    "John@gmail.com", "2345", "John", "face_photo", "Founder of clean air for all", "clean_air.com"
+    "John@gmail.com", "2345", "John", "face_photo", "Founder of clean air for all", "Thailand",  "clean_air.com"
 )
 system.add_user(user_john)
 
@@ -29,6 +29,7 @@ user_alice = User(
     "Alice",
     "face_photo",
     "Lover of all things tech",
+     "Thailand", 
     "alice.tech",
 )
 system.add_user(user_alice)
@@ -39,6 +40,7 @@ user_bob = User(
     "Bob",
     "face_photo",
     "Adventurer and storyteller",
+     "Thailand", 
     "bobadventures.com",
 )
 system.add_user(user_bob)
@@ -55,13 +57,12 @@ project_vr_game.project_detail = "abcdef"
 
 thailand = RewardShipping("20-4-2023", ["Bankok", "A", "B", "C"])
 project_vr_game.add_reward(
-    50, "Early Access", "Be one of the first to play our game!", "None", 200, "20-4-2023", ["Bankok", "A", "B", "C"]
+    50, "Early Access", "Be one of the first to play our game!", 200, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 project_vr_game.add_reward(
     100,
     "Custom Character",
     "Create your own character to use in the game!",
-    "None",
     100,
     "20-4-2023", ["Bankok", "A", "B", "C"]
 )
@@ -77,13 +78,12 @@ project_travel_blog = Project(
 )
 project_travel_blog.project_detail = "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!"
 project_travel_blog.add_reward(
-    25, "Travel Tips Ebook", "Learn our secrets for budget travel!", "digital", 500, "20-4-2023", ["Bankok", "A", "B", "C"]
+    25, "Travel Tips Ebook", "Learn our secrets for budget travel!", 500, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 project_travel_blog.add_reward(
     50,
     "Personalized Postcard",
     "Get a postcard from us during our travels!",
-    "physical",
     100, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 system.launch_project(project_travel_blog)
@@ -131,6 +131,8 @@ project_ai_business = Project(
     user_alice,
     3200
 )
+
+system.add_project(project_ai_business)
 project_ai_business = "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams."
 
 system.launch_project(project_ai_business)
@@ -201,7 +203,7 @@ project_mental_health_chatbot.project_detail = "Mental health is just as importa
 system.launch_project(project_mental_health_chatbot)
 
 # John added a reward
-project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100, "20-4-2023", ["Bankok", "A", "B", "C"])
+project_clean_air.add_reward(150, "Oxygen Tank", "It's large", 100, "20-4-2023", ["Bankok", "A", "B", "C"])
 
 # John lauched the project
 system.launch_project(project_clean_air)
@@ -374,7 +376,6 @@ async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
         pledge_reward["_PledgeReward__reward_goal"],
         pledge_reward["_PledgeReward__reward_name"], 
         pledge_reward["_PledgeReward__reward_detail"], 
-        pledge_reward["_PledgeReward__reward_include"], 
         pledge_reward["_PledgeReward__reward_left"], 
         pledge_reward["_RewardShipping__estimated_delivery"],
         pledge_reward["_RewardShipping__ships_to"]
@@ -456,6 +457,3 @@ async def edit_reward(project_id: int, reward_id: int) -> str:
     project = system.get_project_from_id(project_id)
     project.delete_reward(reward_id)
     return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
-
-
-

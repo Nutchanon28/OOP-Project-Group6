@@ -6,7 +6,7 @@ from credit_card_transaction import CreditCardTransaction
 class User:
     id_counter = 1
     
-    def __init__(self, gmail, password, name, avatar, biography, website):
+    def __init__(self, gmail, password, name, avatar, biography, location, website):
         self.id = User.id_counter
         User.id_counter += 1
 
@@ -15,6 +15,7 @@ class User:
         self.__name = name
         self.__avatar = avatar
         self.__biography = biography
+        self.__location = location
         self.__website = website
         self.__payment_methods = []
         self.__addresses = []
@@ -133,3 +134,4 @@ class User:
     @website.setter
     def website(self, website):
         self.__website = website
+
