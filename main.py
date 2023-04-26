@@ -214,6 +214,7 @@ async def add_the_project(project_dict: dict) -> int:
 
 @app.post("/edit_project/{project_id}/add_pledge_reward", tags=["Pledge Reward"])
 async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
+    print(pledge_reward)
     project = system.get_project_from_id(project_id)
     """
     {
@@ -274,7 +275,7 @@ async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
 
     return f"Add reward to project id {project_id}"
 
-@app.post("/edit_project/{project_id}/add_payment_detail", tags=["Payment Detail"])
+@app.put("/edit_project/{project_id}/add_payment_detail", tags=["Payment Detail"])
 async def add_payment_detail(project_id: int, detail: dict) -> str:
     #SD Set Payment Detail
     project = system.get_project_from_id(project_id)
@@ -293,6 +294,7 @@ async def add_payment_detail(project_id: int, detail: dict) -> str:
         "bank": "muo bank"
     }
     """
+    print(detail)
     project.set_payment_detail(
         detail["legal_first_name"],
         detail["legal_last_name"],

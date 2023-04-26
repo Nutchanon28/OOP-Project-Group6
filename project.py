@@ -37,7 +37,7 @@ class Project:
         self.__pleadge_backers = []
         self.__updates = []
         self.__backings = []
-        self.__payment_detail = None
+        self.__payment_detail = PaymentDetail("", "", "", "", "", "", "FLORIDA", "", "", "", "BANKOK BANK")
 
     def get_project_detail(self):
         project_detail = {
@@ -106,6 +106,7 @@ class Project:
 
     def get_reward_from_id(self, id):
         for reward in self.__pledge_rewards:
+            print(f"id = {id} reward_id = {reward.id}")
             if reward.id == id:
                 return reward
             
@@ -181,15 +182,7 @@ class Project:
 
     @pledge_goal.setter
     def pledge_goal(self, new_pledge_goal):
-        def is_valid_goal(goal):
-            return 1 <= goal <= 100000000
-        
-        new_pledge_goal = int(new_pledge_goal)
-
-        if is_valid_goal(new_pledge_goal):
-            self.__pledge_goal = new_pledge_goal
-        else:
-            print("!!!!!Please enter a valid goal.")
+        self.__pledge_goal = int(new_pledge_goal)
 
     @project_image.setter
     def project_image(self, new_image):
