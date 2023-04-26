@@ -1,189 +1,134 @@
-from pledge_reward import PledgeReward
+from backing import Backing
+from address import Address
 from comment import Comment
-from update import Update
-
-
-class Project:
+from credit_card_transaction import CreditCardTransaction
+class User:
     id_counter = 1
+    
+    def __init__(self, gmail, password, name, avatar, biography, website):
+        self.id = User.id_counter
+        User.id_counter += 1
 
-    def __init__(
-        self,
-        project_name,
-        category,
-        project_image,
-        project_duration,
-        project_detail,
-        project_creator,
-        pledge_goal
-    ):
-        self.id = Project.id_counter
-        Project.id_counter += 1
-
-        self.__project_name = project_name
-        self.__category = category
-        self.__project_image = project_image
-        self.__project_duration = project_duration
-        self.__project_detail = project_detail
-        self.__project_creator = project_creator
-        self.__pledge_goal = pledge_goal
-        self.__pledge_received = 0
-        self.__pledge_rewards = []
-        self.__updates = []
+        self.__gmail = gmail
+        self.__password = password
+        self.__name = name
+        self.__avatar = avatar
+        self.__biography = biography
+        self.__website = website
+        self.__payment_methods = []
+        self.__addresses = []
         self.__backings = []
-        self.__comments = []
-
-    def add_backing(self, backing):
-        self.__backings.append(backing)
-        self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
-        backing.reward_item.reward_left = backing.reward_item.reward_left - 1
-        # for pledge_reward in self.__pledge_rewards:
-        #     if pledge_reward.reward_name == backing.reward_item.reward_name:
-        #         pledge_reward.reward_left(pledge_reward.reward_left - 1)
-        # if make_payment(credit_card, pledge_reward.reward_goal) == "successful":
-
-    # set_pledge_reward
-    def add_reward(
-        self, reward_goal, reward_name, reward_detail, reward_include, reward_left
-    ):
-        new_reward = PledgeReward(
-            reward_goal, reward_name, reward_detail, reward_include, reward_left
-        )
-        self.__pledge_rewards.append(new_reward)
-
-    def get_project_detail(self):
-        project_detail = {
-            "name": self.__project_name,
-            "image": self.__project_image,
-            "detail": self.__project_detail,
-            "category": self.__category,
-            "pledge_received": self.__pledge_received,
-            "number_of_backers": len(self.__backings),
-            "pledge_goal": self.__pledge_goal,
-            "project_duration": self.__project_duration
-        }
-        creator_detail = self.__project_creator.get_creator_detail()
-
-        pledge_rewards_list = [
-            reward.get_reward_detail() for reward in self.__pledge_rewards
-        ]
-        updates_list = [update.get_update_detail() for update in self.__updates]
-        comments_list = [comment.get_comment_detail() for comment in self.__comments]
-
-        return {
-            "project_detail": project_detail,
-            "creator_detail": creator_detail,
-            "pledge_rewards": pledge_rewards_list,
-            "updates": updates_list,
-            "comments": comments_list,
-        }
-
+        self.__notifications = []
+    
+    # user's method (view project)
     def get_creator_detail(self):
-        pass
-
-    def edit_project(self, project_name, category, project_image, pledge_duration):
-        pass
-
-    def set_reward_shipping(self, estimated_delivery, ships_to, old_reward_shipping):
-        pass
-
-    def set_pledge_rewards(
-        self,
-        reward_goal,
-        reward_name,
-        reward_detail,
-        max_reward_backers,
-        reward_include,
-        old_pledge_reward,
-    ):
-        pass
-
-    def verify_creator_detail(
-        self,
-        legal_first_name,
-        legal_last_name,
-        email_address,
-        date_of_birth,
-        home_address,
-        city,
-        state,
-        postal_code,
-        phone_number,
-    ):
-        pass
-      
-    def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(self, update_title, update_creator, update_detail ,update_image)
-        self.__updates.append(new_update)
-        return "finished add update"
+        # creator (User) is keep in System, but also here ??
+        creator_detail = {
+            "name": self.__name,
+            "avatar": self.__avatar,
+            "biography": self.__biography,
+            "location": self.__location,
+            "website": self.__website
+        }
+        return creator_detail
+        
+    def back_project(self, project, credit_card, pledge_reward, bonus_cost):
+        if credit_card.money_left >= pledge_reward.reward_goal:
+            new_amount = credit_card.money_left - pledge_reward.reward_goal - bonus_cost
+            credit_card.money_left = new_amount
+            print(f"lose {pledge_reward.reward_goal} bath from {credit_card}")
+            new_backing = Backing(self.id, project, pledge_reward, pledge_reward.reward_goal, bonus_cost)
+            self.__backings.append(new_backing)
+            project.add_backing(new_backing)
+            return "successful backing, money left = " + str(credit_card.money_left)
+        else:
+            return "insufficient fund"
+ 
+    def add_address(self, country, address_nickname, full_name, address, city, phone_number):
+        new_address = Address(country, address_nickname, full_name, address, city, phone_number)
+        self.__addresses.append(new_address)
+        return "finished add address"
+                
+    def add_payment_method(self, country, cvc, expiration, card_number):
+        new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)
+        self.__payment_methods.append(new_credit_card)
     
-    def create_comment(self, sending_time, text, writer):
-        new_comment = Comment(sending_time, text, writer)
-        self.__comments.append(new_comment)
-        return "comment successful"
+    def get_credit_card_from_id(self, id):
+        for credit_card in self.__payment_methods:
+            if credit_card.id == id:
+                return credit_card
+        return "credit card not found"
 
-    def create_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail, update_image)
-        self.__updates.append(new_update)
-        # print(f"title: {new_update.update_title} \ncreator: {new_update.update_creator} \ndetail: {new_update.update_detail} \nimage: {new_update.update_image}")
-        return "finished add update"
-    
-    def get_reward_from_id(self, id):
-        for pledge_reward in self.__pledge_rewards:
-            if pledge_reward.id == id:
-                return pledge_reward
-        return "reward not found"
-
-    @property
-    def pledge_reward(self):
-        return self.__pleadge_rewards
-
-    @property
-    def pledge_goal(self):
-        return self.__pledge_goal
-
-    @pledge_goal.setter
-    def pledge_goal(self, new_pledge_goal):
-        if isinstance(new_pledge_goal, int):
-            self.__pledge_goal
+    def get_backed_project(self):
+        backed_projects = []
+        for backing in self.__backings:
+            backed_projects.append(backing.project)
+        return backed_projects
     
     @property
-    def comments(self):
-        return self.__comments
+    def notifications(self):
+        return self.__notifications
     
-    @comments.setter
-    def comments(self, new_comment):
-        if isinstance(new_comment, Comment):
-            self.__comments.append(new_comment)
-            
     @property
-    def project_name(self):
-        return self.__project_name
-
+    def payment_methods(self):
+        return self.__payment_methods
+    
     @property
-    def category(self):
-        return self.__category
-
+    def addresses(self):
+        return self.__addresses
+    
     @property
-    def project_image(self):
-        return self.__project_image
-
+    def name(self):
+        return self.__name
+    
+    @name.setter
+    def name(self, name):
+        self.__name = name
+    
     @property
-    def project_duration(self):
-        return self.__project_duration
-
+    def gmail(self):
+        return self.__gmail
+    
+    @gmail.setter
+    def gmail(self, gmail):
+        self.__gmail = gmail
+    
     @property
-    def project_creator(self):
-        return self.__project_creator
-
+    def password(self):
+        return self.__password
+    
+    @password.setter
+    def password(self, password):
+        self.__password = password
+    
     @property
-    def pledge_received(self):
-        return self.__pledge_received
-
-    @pledge_received.setter
-    def pledge_received(self, new_value):
-        if isinstance(new_value, int) and new_value >= 0:
-            self.__pledge_received = new_value
-
+    def avatar(self):
+        return self.__avatar
+    
+    @avatar.setter
+    def avatar(self, avatar):
+        self.__avatar = avatar
+    
     @property
-    def project_detail(self):
-        return self.__project_detail
+    def biography(self):
+        return self.__biography
+    
+    @biography.setter
+    def biography(self, biography):
+        self.__biography = biography
+    
+    @property
+    def location(self):
+        return self.__location
+    
+    @location.setter
+    def location(self, location):
+        self.__location = location
+    
+    @property
+    def website(self):
+        return self.__website
+    
+    @website.setter
+    def website(self, website):
+        self.__website = website
