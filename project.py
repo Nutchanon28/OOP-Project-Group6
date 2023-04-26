@@ -2,6 +2,7 @@ from credit_card_transaction import CreditCardTransaction
 from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
+from reward_shipping import RewardShipping
 
 
 class Project:
@@ -40,10 +41,11 @@ class Project:
 
     # set_pledge_reward
     def add_reward(
-        self, reward_goal, reward_name, reward_detail, reward_include, reward_left
+        self, reward_goal, reward_name, reward_detail, reward_include, reward_left, estimated_delivery, ships_to
     ):
+        new_shipping = RewardShipping(estimated_delivery, ships_to)
         new_reward = PledgeReward(
-            reward_goal, reward_name, reward_detail, reward_include, reward_left
+            reward_goal, reward_name, reward_detail, reward_include, reward_left, new_shipping
         )
         self.__pledge_rewards.append(new_reward)
 

@@ -11,6 +11,9 @@ class System:
         if isinstance(user, User):
             self.__user_list.append(user)
 
+    def add_project(self, project):
+        self.__project_list.append(project)
+
     # system's method (view project)
     def get_user_from_id(self, id):
         for user in self.__user_list:
