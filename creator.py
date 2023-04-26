@@ -26,9 +26,6 @@ class Creator(User):
     def view_setting():
         pass
     
-    def add_update():
-        pass
-    
     def delete_project():
         pass
     
