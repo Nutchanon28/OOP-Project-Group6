@@ -457,7 +457,3 @@ async def edit_reward(project_id: int, reward_id: int) -> str:
     project = system.get_project_from_id(project_id)
     project.delete_reward(reward_id)
     return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
-
-
-
-

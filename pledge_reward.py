@@ -1,8 +1,9 @@
 class PledgeReward:
     id_counter = 1
 
-    def __init__(self, reward_goal, reward_name, reward_detail, reward_left, reward_shipping):
-
+    def __init__(
+        self, reward_goal, reward_name, reward_detail, reward_left, reward_shipping
+    ):
         self.id = PledgeReward.id_counter
         PledgeReward.id_counter += 1
 
@@ -18,6 +19,7 @@ class PledgeReward:
 
     def get_reward_detail(self):
         reward_detail = {
+            "id": self.id,
             "reward_goal": self.__reward_goal,
             "reward_name": self.__reward_name,
             "reward_detail": self.__reward_detail,
