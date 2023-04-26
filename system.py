@@ -47,7 +47,6 @@ class System:
 
     def launch_project(self, project):
         if isinstance(project, Project):
-            print("launchhhhhhhhhhhhhhhh")
             self.__launched_projects.append(project)
 
     def check_project_payment_detail(self, Project):
