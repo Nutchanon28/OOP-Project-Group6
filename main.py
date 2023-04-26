@@ -5,35 +5,38 @@ from fastapi.middleware.cors import CORSMiddleware
 from project import Project
 from system import System
 from user import User
-from creditCardTransaction import CreditCardTransaction
+from credit_card_transaction import CreditCardTransaction
 
 import json
 from datetime import datetime
 
 system = System()
+    
 user_jame = User(
-    "Jame", "face_photo", "Just a simple guy", "Bangkok", "jame_project.com"
+    "Jame@gmail.com", "1234", "Jame", "face_photo", "Just a simple guy", "jame_project.com"
 )
 system.add_user(user_jame)
 user_john = User(
-    "John", "face_photo", "Founder of clean air for all", "Changmai", "clean_air.com"
+    "John@gmail.com", "2345", "John", "face_photo", "Founder of clean air for all", "clean_air.com"
 )
 system.add_user(user_john)
 
 user_alice = User(
+    "Alice@gmail.com",
+    "3456",
     "Alice",
     "face_photo",
     "Lover of all things tech",
-    "San Francisco",
     "alice.tech",
 )
 system.add_user(user_alice)
 
 user_bob = User(
+    "Bob@gmail.com",
+    "4567",
     "Bob",
     "face_photo",
     "Adventurer and storyteller",
-    "New York",
     "bobadventures.com",
 )
 system.add_user(user_bob)
@@ -193,7 +196,6 @@ project_mental_health_chatbot = Project(
 
 system.launch_project(project_mental_health_chatbot)
 
-
 # John added a reward
 project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100)
 
@@ -204,6 +206,8 @@ system.launch_project(project_clean_air)
 user_jame.add_payment_method("Thailand", "000", "06/25", "420694206928")
 user_jame.add_payment_method("Thailand", "001", "06/25", "320694206928")
 user_jame.add_payment_method("Thailand", "002", "06/25", "220694206928")
+
+user_jame.back_project(project_clean_air, user_jame.payment_methods[0], project_clean_air.pledge_rewards[0],1000)
 
 app = FastAPI()
 

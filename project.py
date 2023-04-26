@@ -134,8 +134,8 @@ class Project:
         return "reward not found"
 
     @property
-    def pledge_reward(self):
-        return self.__pleadge_rewards
+    def pledge_rewards(self):
+        return self.__pledge_rewards
 
     @property
     def pledge_goal(self):
