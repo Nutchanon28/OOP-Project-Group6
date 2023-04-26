@@ -3,8 +3,10 @@ from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
 from reward_shipping import RewardShipping
+
+
 class Project:
-    
+
     id_counter = 1
 
     def __init__(
@@ -29,15 +31,16 @@ class Project:
 
     def add_backing(self, backing):
         self.__backings.append(backing)
-        self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
+        self.pledge_received = self.pledge_received + \
+            backing.reward_cost + backing.bonus_cost
         backing.reward_item.reward_left = backing.reward_item.reward_left - 1
 
     def add_reward(
-        self, reward_goal, reward_name, reward_detail, reward_include, reward_left, estimated_delivery, ships_to
+        self, reward_goal, reward_name, reward_detail, reward_left, estimated_delivery, ships_to
     ):
         new_shipping = RewardShipping(estimated_delivery, ships_to)
         new_reward = PledgeReward(
-            reward_goal, reward_name, reward_detail, reward_include, reward_left, new_shipping
+            reward_goal, reward_name, reward_detail, reward_left, new_shipping
         )
 
         self.__pledge_rewards.append(new_reward)
@@ -58,8 +61,10 @@ class Project:
         pledge_rewards_list = [
             reward.get_reward_detail() for reward in self.__pledge_rewards
         ]
-        updates_list = [update.get_update_detail() for update in self.__updates]
-        comments_list = [comment.get_comment_detail() for comment in self.__comments]
+        updates_list = [update.get_update_detail()
+                        for update in self.__updates]
+        comments_list = [comment.get_comment_detail()
+                         for comment in self.__comments]
 
         return {
             "project_detail": project_detail,
@@ -68,9 +73,10 @@ class Project:
             "updates": updates_list,
             "comments": comments_list,
         }
-    
+
     def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(self, update_title, update_creator, update_detail ,update_image)
+        new_update = Update(self, update_title, update_creator,
+                            update_detail, update_image)
         self.__updates.append(new_update)
         return "finished add update"
 
@@ -82,19 +88,6 @@ class Project:
         self.__category = category
         self.project_image = project_image
         self.project_duration = pledge_duration
-        
-    def print_project(self):
-        print(f"project name: {self.__project_name}")
-        print(f"project category: {self.__category}")
-        print(f"pledge duration: {self.__project_duration}")
-        print(f"project image: {self.__project_image}")
-        print(f"pledge goal: {self.__pledge_goal}")
-        print(f"project detail: {self.__project_detail}")
-        print("pledge reward:")
-        for reward in self.__pledge_rewards:
-            tmp = vars(reward)
-            print(', '.join("%s: %s" % item for item in tmp.items()))
-
 
     def set_reward_shipping(self, estimated_delivery, ships_to, old_reward_shipping):
         pass
@@ -104,8 +97,6 @@ class Project:
 
     def create_update(self, update_title, update_creator, update_detail, update_image):
         pass
-
-    
 
     def get_reward_from_id(self, id):
         for reward in self.__pledge_rewards:
@@ -122,61 +113,61 @@ class Project:
     @property
     def pledge_rewards(self):
         return self.__pledge_rewards
-    
+
     @property
     def pledge_goal(self):
         return self.__pledge_goal
-    
+
     @property
     def comments(self):
         return self.__comments
-    
+
     @comments.setter
     def comments(self, new_comment):
         if isinstance(new_comment, Comment):
             self.__comments.append(new_comment)
-    
+
     @property
     def project_name(self):
         return self.__project_name
-    
+
     @property
     def category(self):
         return self.__category
-    
+
     @property
     def project_image(self):
         return self.__project_image
-    
+
     @property
     def project_duration(self):
         return self.__project_duration
-    
+
     @property
     def project_creator(self):
         return self.__project_creator
-    
+
     @property
     def project_detail(self):
         return self.__project_detail
-    
+
     @property
     def pledge_rewards(self):
         return self.__pledge_rewards
-    
+
     @property
     def credit_card(self):
         return self.__credit_card
-    
+
     @credit_card.setter
     def credit_card(self, new_credit_card):
         self.__credit_card = new_credit_card
-    
+
     @project_detail.setter
     def project_detail(self, new_project_detail):
         if isinstance(new_project_detail, str):
             self.__project_detail = new_project_detail
-    
+
     @project_name.setter
     def project_name(self, new_project_name):
         if isinstance(new_project_name):
