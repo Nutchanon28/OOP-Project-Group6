@@ -1,3 +1,4 @@
+from credit_card_transaction import CreditCardTransaction
 from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
@@ -12,7 +13,6 @@ class Project:
         category,
         project_image,
         project_duration,
-        project_detail,
         project_creator,
         pledge_goal
     ):
@@ -23,7 +23,7 @@ class Project:
         self.__category = category
         self.__project_image = project_image
         self.__project_duration = project_duration
-        self.__project_detail = project_detail
+        self.__project_detail = ""
         self.__project_creator = project_creator
         self.__pledge_goal = pledge_goal
         self.__pledge_received = 0
@@ -31,15 +31,12 @@ class Project:
         self.__updates = []
         self.__backings = []
         self.__comments = []
+        self.__credit_card = None
 
     def add_backing(self, backing):
         self.__backings.append(backing)
         self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
         backing.reward_item.reward_left = backing.reward_item.reward_left - 1
-        # for pledge_reward in self.__pledge_rewards:
-        #     if pledge_reward.reward_name == backing.reward_item.reward_name:
-        #         pledge_reward.reward_left(pledge_reward.reward_left - 1)
-        # if make_payment(credit_card, pledge_reward.reward_goal) == "successful":
 
     # set_pledge_reward
     def add_reward(
@@ -85,31 +82,6 @@ class Project:
 
     def set_reward_shipping(self, estimated_delivery, ships_to, old_reward_shipping):
         pass
-
-    def set_pledge_rewards(
-        self,
-        reward_goal,
-        reward_name,
-        reward_detail,
-        max_reward_backers,
-        reward_include,
-        old_pledge_reward,
-    ):
-        pass
-
-    def verify_creator_detail(
-        self,
-        legal_first_name,
-        legal_last_name,
-        email_address,
-        date_of_birth,
-        home_address,
-        city,
-        state,
-        postal_code,
-        phone_number,
-    ):
-        pass
       
     def add_update(self, update_title, update_creator, update_detail, update_image):
         new_update = Update(self, update_title, update_creator, update_detail ,update_image)
@@ -132,10 +104,23 @@ class Project:
             if pledge_reward.id == id:
                 return pledge_reward
         return "reward not found"
+    
+    @property
+    def project_detail(self):
+        return self.__project_detail
+    
+    @project_detail.setter
+    def project_detail(self, new_project_detail):
+        if isinstance(new_project_detail, str):
+            self.__project_detail = new_project_detail
 
     @property
     def pledge_rewards(self):
         return self.__pledge_rewards
+    
+    @property
+    def credit_card(self):
+        return self.__credit_card
 
     @property
     def pledge_goal(self):
@@ -143,8 +128,7 @@ class Project:
 
     @pledge_goal.setter
     def pledge_goal(self, new_pledge_goal):
-        if isinstance(new_pledge_goal, int):
-            self.__pledge_goal
+        self.__pledge_goal = int(new_pledge_goal)
     
     @property
     def comments(self):
@@ -158,18 +142,38 @@ class Project:
     @property
     def project_name(self):
         return self.__project_name
+    
+    @project_name.setter
+    def project_name(self, new_project_name):
+        if isinstance(new_project_name, str):
+            self.__project_name = new_project_name
 
     @property
     def category(self):
         return self.__category
+    
+    @category.setter
+    def category(self, new_category):
+        if isinstance(new_category, str):
+            self.__category = new_category
 
     @property
     def project_image(self):
         return self.__project_image
+    
+    @project_image.setter
+    def project_image(self, new_project_image):
+        if isinstance(new_project_image, str):
+            self.__project_image = new_project_image
 
     @property
     def project_duration(self):
         return self.__project_duration
+    
+    @project_duration.setter
+    def project_duration(self, new_project_duration):
+        if isinstance(new_project_duration, int):
+            self.__project_duration = new_project_duration
 
     @property
     def project_creator(self):

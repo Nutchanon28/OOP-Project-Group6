@@ -20,10 +20,23 @@ class System:
     
     # system's method (view project)
     def get_project_from_id(self, id):
-        for project in self.__launched_projects:
+        """for project in self.__launched_projects:
+            if project.id == id:
+                return project"""
+        #Rew
+        for project in self.__project_list:
             if project.id == id:
                 return project
         return "project not found"
+    
+    #rew : get creator's projects
+    def get_my_projects(self, creator_id):
+        my_projects = []
+        for project in self.__project_list:
+            if project.project_creator.id == creator_id:
+                my_projects.append(project)
+
+        return my_projects
 
     def delete_project(self, project):
         if project in self.__project_list:

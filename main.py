@@ -212,7 +212,8 @@ user_jame.back_project(project_clean_air, user_jame.payment_methods[0], project_
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "localhost:3000"
 ]
 
 app.add_middleware(
