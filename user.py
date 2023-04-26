@@ -5,11 +5,13 @@ from creditCardTransaction import CreditCardTransaction
 class User:
     id_counter = 1
     
-    def __init__(self, name, avatar, biography, location, website):
+    def __init__(self, name, gmail, password, avatar, biography, location, website):
         self.id = User.id_counter
         User.id_counter += 1
 
         self.__name = name
+        self.__gmail = gmail
+        self.__password = password
         self.__avatar = avatar
         self.__biography = biography
         self.__location = location
@@ -17,8 +19,6 @@ class User:
         self.__backings = []
         self.__notifications = []
         self.__payment_methods = []
-        self.__gmail = ""
-        self.__password = ""
         self.__addresses = []
     
     # user's method (view project)
@@ -53,10 +53,6 @@ class User:
     def create_address(self, country, address_nickname, full_name, address, city, phone_number):
         self.__address_list.append(Address(country, address_nickname, full_name, address, city, phone_number))
                 
-    def send_comment(self, project, ):
-        self.__name
-        new_comment = Comment("time_now", "text", self)
-              
     def add_payment_method(self, country, cvc, expiration, card_number):
         new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)
         self.__payment_methods.append(new_credit_card)
@@ -72,11 +68,7 @@ class User:
         for backing in self.__backings:
             backed_projects.append(backing.project)
         return backed_projects
-
-    @property
-    def name(self):
-        return self.__name
-        
+    
     @property
     def notifications(self):
         return self.__notifications
@@ -88,3 +80,60 @@ class User:
     @property
     def addresses(self):
         return self.__addresses
+    
+    @property
+    def name(self):
+        return self.__name
+    
+    @name.setter
+    def name(self, name):
+        self.__name = name
+    
+    @property
+    def gmail(self):
+        return self.__gmail
+    
+    @gmail.setter
+    def gmail(self, gmail):
+        self.__gmail = gmail
+    
+    @property
+    def password(self):
+        return self.__password
+    
+    @password.setter
+    def password(self, password):
+        self.__password = password
+    
+    @property
+    def avatar(self):
+        return self.__avatar
+    
+    @avatar.setter
+    def avatar(self, avatar):
+        self.__avatar = avatar
+    
+    @property
+    def biography(self):
+        return self.__biography
+    
+    @biography.setter
+    def biography(self, biography):
+        self.__biography = biography
+    
+    @property
+    def location(self):
+        return self.__location
+    
+    @location.setter
+    def location(self, location):
+        self.__location = location
+    
+    @property
+    def website(self):
+        return self.__website
+    
+    @website.setter
+    def website(self, website):
+        self.__website = website
+    
