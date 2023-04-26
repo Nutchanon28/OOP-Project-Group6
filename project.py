@@ -2,6 +2,7 @@ from credit_card_transaction import CreditCardTransaction
 from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
+from reward_shipping import RewardShipping
 class Project:
     
     id_counter = 1
@@ -32,11 +33,13 @@ class Project:
         backing.reward_item.reward_left = backing.reward_item.reward_left - 1
 
     def add_reward(
-        self, reward_goal, reward_name, reward_detail, reward_include, reward_left
+        self, reward_goal, reward_name, reward_detail, reward_include, reward_left, estimated_delivery, ships_to
     ):
+        new_shipping = RewardShipping(estimated_delivery, ships_to)
         new_reward = PledgeReward(
-            reward_goal, reward_name, reward_detail, reward_include, reward_left
+            reward_goal, reward_name, reward_detail, reward_include, reward_left, new_shipping
         )
+
         self.__pledge_rewards.append(new_reward)
 
     def get_project_detail(self):
@@ -65,6 +68,11 @@ class Project:
             "updates": updates_list,
             "comments": comments_list,
         }
+    
+    def add_update(self, update_title, update_creator, update_detail, update_image):
+        new_update = Update(self, update_title, update_creator, update_detail ,update_image)
+        self.__updates.append(new_update)
+        return "finished add update"
 
     def get_creator_detail(self):
         pass
@@ -91,9 +99,6 @@ class Project:
     def set_reward_shipping(self, estimated_delivery, ships_to, old_reward_shipping):
         pass
 
-    def set_pledge_rewards(self, reward_goal, reward_name, reward_detail, max_reward_backers, reward_include, old_pledge_reward):
-        pass
-
     def create_comment(self, sending_time, text, writer):
         pass
 
@@ -107,11 +112,6 @@ class Project:
             print(f"id = {id} reward_id = {reward.id}")
             if reward.id == id:
                 return reward
-            
-    def set_payment_detail(self, legal_first_name, legal_last_name, email_address,
-                 date_of_birth, home_address, city, state, postal_code, phone_number, account_number, bank):
-        self.__payment_detail = PaymentDetail(legal_first_name, legal_last_name, email_address,
-                 date_of_birth, home_address, city, state, postal_code, phone_number, account_number, bank)
 
     def delete_reward(self, reward_id):
         for reward in self.__pledge_rewards:
@@ -167,6 +167,10 @@ class Project:
     @property
     def credit_card(self):
         return self.__credit_card
+    
+    @credit_card.setter
+    def credit_card(self, new_credit_card):
+        self.__credit_card = new_credit_card
     
     @project_detail.setter
     def project_detail(self, new_project_detail):

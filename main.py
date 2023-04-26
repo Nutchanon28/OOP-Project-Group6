@@ -52,8 +52,10 @@ project_vr_game = Project(
     10000
 )
 project_vr_game.project_detail = "abcdef"
+
+thailand = RewardShipping("20-4-2023", ["Bankok", "A", "B", "C"])
 project_vr_game.add_reward(
-    50, "Early Access", "Be one of the first to play our game!", "None", 200
+    50, "Early Access", "Be one of the first to play our game!", "None", 200, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 project_vr_game.add_reward(
     100,
@@ -61,6 +63,7 @@ project_vr_game.add_reward(
     "Create your own character to use in the game!",
     "None",
     100,
+    "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 system.launch_project(project_vr_game)
 
@@ -74,14 +77,14 @@ project_travel_blog = Project(
 )
 project_travel_blog.project_detail = "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!"
 project_travel_blog.add_reward(
-    25, "Travel Tips Ebook", "Learn our secrets for budget travel!", "digital", 500
+    25, "Travel Tips Ebook", "Learn our secrets for budget travel!", "digital", 500, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 project_travel_blog.add_reward(
     50,
     "Personalized Postcard",
     "Get a postcard from us during our travels!",
     "physical",
-    100,
+    100, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 system.launch_project(project_travel_blog)
 project_travel_blog.add_update(
@@ -198,7 +201,7 @@ project_mental_health_chatbot.project_detail = "Mental health is just as importa
 system.launch_project(project_mental_health_chatbot)
 
 # John added a reward
-project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100)
+project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100, "20-4-2023", ["Bankok", "A", "B", "C"])
 
 # John lauched the project
 system.launch_project(project_clean_air)
@@ -367,23 +370,15 @@ async def add_the_project(project_dict: dict) -> str:
 async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
 
     project = system.get_project_from_id(project_id)
-    reward_shipping = RewardShipping(
-        pledge_reward["_RewardShipping__estimated_delivery"],
-        pledge_reward["_RewardShipping__ships_to"], 
-        pledge_reward["_RewardShipping__address"], 
-        pledge_reward["_RewardShipping__shipping_cost"]
-    )
-    reward = PledgeReward(
+    project.add_reward(
         pledge_reward["_PledgeReward__reward_goal"],
         pledge_reward["_PledgeReward__reward_name"], 
         pledge_reward["_PledgeReward__reward_detail"], 
         pledge_reward["_PledgeReward__reward_include"], 
-        pledge_reward["_PledgeReward__reward_backers"], 
-        pledge_reward["_PledgeReward__max_reward_backers"], 
-        reward_shipping, 
-        int(pledge_reward["reward_id"])
-        )
-    project.add_reward(reward)
+        pledge_reward["_PledgeReward__reward_left"], 
+        pledge_reward["_RewardShipping__estimated_delivery"],
+        pledge_reward["_RewardShipping__ships_to"]
+    )
 
     return f"Add reward to project id {project_id}"
 
