@@ -1,25 +1,24 @@
 from backing import Backing
 from address import Address
 from comment import Comment
-from creditCardTransaction import CreditCardTransaction
+from credit_card_transaction import CreditCardTransaction
 class User:
     id_counter = 1
     
-    def __init__(self, name, gmail, password, avatar, biography, location, website):
+    def __init__(self, gmail, password, name, avatar, biography, website):
         self.id = User.id_counter
         User.id_counter += 1
 
-        self.__name = name
         self.__gmail = gmail
         self.__password = password
+        self.__name = name
         self.__avatar = avatar
         self.__biography = biography
-        self.__location = location
         self.__website = website
-        self.__backings = []
-        self.__notifications = []
         self.__payment_methods = []
         self.__addresses = []
+        self.__backings = []
+        self.__notifications = []
     
     # user's method (view project)
     def get_creator_detail(self):
@@ -49,9 +48,6 @@ class User:
         new_address = Address(country, address_nickname, full_name, address, city, phone_number)
         self.__addresses.append(new_address)
         return "finished add address"
-
-    def create_address(self, country, address_nickname, full_name, address, city, phone_number):
-        self.__address_list.append(Address(country, address_nickname, full_name, address, city, phone_number))
                 
     def add_payment_method(self, country, cvc, expiration, card_number):
         new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)

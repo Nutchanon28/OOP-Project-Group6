@@ -1,4 +1,4 @@
-from pledgeReward import PledgeReward
+from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
 
