@@ -2,13 +2,14 @@ from backing import Backing
 from address import Address
 from comment import Comment
 from credit_card_transaction import CreditCardTransaction
+
 class User:
     id_counter = 1
     
     def __init__(self, gmail, password, name, avatar, biography, website):
         self.id = User.id_counter
         User.id_counter += 1
-        
+
         self.__gmail = gmail
         self.__password = password
         self.__name = name
@@ -43,14 +44,11 @@ class User:
             return "successful backing, money left = " + str(credit_card.money_left)
         else:
             return "insufficient fund"
-            
+
     def add_address(self, country, address_nickname, full_name, address, city, phone_number):
         new_address = Address(country, address_nickname, full_name, address, city, phone_number)
         self.__addresses.append(new_address)
         return "finished add address"
-
-    def create_address(self, country, address_nickname, full_name, address, city, phone_number):
-        self.__address_list.append(Address(country, address_nickname, full_name, address, city, phone_number))
 
     def add_payment_method(self, country, cvc, expiration, card_number):
         new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)

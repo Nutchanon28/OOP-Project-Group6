@@ -1,8 +1,15 @@
 from user import User
+from update import Update
 class Creator(User):
-    def __init__(self, account, message, payment_method, name, avatar, biography, location, time_zone, vanity_url, website, addresses, following, followers, blocked):
-        super().__init__(self, account, message, payment_method, name, avatar, biography, location, time_zone, vanity_url, website, addresses, following, followers, blocked)
+    def __init__(self, name, avatar, biography, location, website):
+        super().__init__(self, name, avatar, biography, location, website)
         pass
+    
+    def add_update(self, project, update_title, update_detail, update_image):
+        new_update = Update(project, update_title, self, update_detail, update_image)
+        project.updates.append(new_update)
+        return new_update.get_update_detail
+        
     
     @property
     def message(self):
