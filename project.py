@@ -1,4 +1,4 @@
-from pledgeReward import PledgeReward
+from pledgereward import PledgeReward
 from comment import Comment
 from update import Update
 
@@ -31,15 +31,13 @@ class Project:
         self.__updates = []
         self.__backings = []
         self.__comments = []
+        self.__faqs = []
 
-    def add_backing(self, backing):
+    def add_backing(self, backing, reward_goal):
         self.__backings.append(backing)
         self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
-        backing.reward_item.reward_left = backing.reward_item.reward_left - 1
-        # for pledge_reward in self.__pledge_rewards:
-        #     if pledge_reward.reward_name == backing.reward_item.reward_name:
-        #         pledge_reward.reward_left(pledge_reward.reward_left - 1)
-        # if make_payment(credit_card, pledge_reward.reward_goal) == "successful":
+        if reward_goal != 0:
+            backing.reward_item.reward_left = backing.reward_item.reward_left - 1
 
     # set_pledge_reward
     def add_reward(
@@ -49,6 +47,12 @@ class Project:
             reward_goal, reward_name, reward_detail, reward_include, reward_left
         )
         self.__pledge_rewards.append(new_reward)
+
+    def add_faq(
+        self, faq
+    ):
+        if isinstance(faq, str):
+            self.__faqs.append(faq)
 
     def get_project_detail(self):
         project_detail = {
@@ -75,6 +79,7 @@ class Project:
             "project_detail": project_detail,
             "creator_detail": creator_detail,
             "pledge_rewards": pledge_rewards_list,
+            "faqs": self.__faqs,
             "updates": updates_list,
             "comments": comments_list,
         }
@@ -114,7 +119,7 @@ class Project:
         pass
 
     def create_comment(self, sending_time, text, writer):
-        new_comment = Comment(sending_time, text, writer)
+        new_comment = Comment(sending_time, text, writer.name)
         self.__comments.append(new_comment)
         return "comment successful"
 
@@ -175,3 +180,6 @@ class Project:
     @property
     def project_detail(self):
         return self.__project_detail
+    
+    def number_of_backings(self):
+        return len(self.__backings)
