@@ -33,8 +33,8 @@ class User:
             "website": self.__website
         }
         return creator_detail
-    
-    def back_project(self, project, credit_card, pledge_reward, bonus_cost):
+
+def back_project(self, project, credit_card, pledge_reward, bonus_cost):
         reward_goal = 0
         if pledge_reward != "reward not found":
             reward_goal = pledge_reward.reward_goal
@@ -63,17 +63,13 @@ class User:
             if credit_card.id == id:
                 return credit_card
         return "credit card not found"
-    
+
     def get_backed_project(self):
         backed_projects = []
         for backing in self.__backings:
             backed_projects.append(backing.project)
         return backed_projects
-
-    @property
-    def name(self):
-        return self.__name
-        
+    
     @property
     def notifications(self):
         return self.__notifications
@@ -83,21 +79,62 @@ class User:
         return self.__payment_methods
     
     @property
-    def following(self):
-        return self.__following
-    
-    @property
-    def followers(self):
-        return self.__followers
-    
-    @property
-    def blocked(self):
-        return self.__blocked
-    
-    @property
     def addresses(self):
         return self.__addresses
     
-    def add_address(self, country, address_nickname, full_name, address, city, phone_number):
-        pass
+    @property
+    def name(self):
+        return self.__name
+    
+    @name.setter
+    def name(self, name):
+        self.__name = name
+    
+    @property
+    def gmail(self):
+        return self.__gmail
+    
+    @gmail.setter
+    def gmail(self, gmail):
+        self.__gmail = gmail
+    
+    @property
+    def password(self):
+        return self.__password
+    
+    @password.setter
+    def password(self, password):
+        self.__password = password
+    
+    @property
+    def avatar(self):
+        return self.__avatar
+    
+    @avatar.setter
+    def avatar(self, avatar):
+        self.__avatar = avatar
+    
+    @property
+    def biography(self):
+        return self.__biography
+    
+    @biography.setter
+    def biography(self, biography):
+        self.__biography = biography
+    
+    @property
+    def location(self):
+        return self.__location
+    
+    @location.setter
+    def location(self, location):
+        self.__location = location
+    
+    @property
+    def website(self):
+        return self.__website
+    
+    @website.setter
+    def website(self, website):
+        self.__website = website
 
