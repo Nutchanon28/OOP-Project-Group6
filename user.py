@@ -5,7 +5,7 @@ from credit_card_transaction import CreditCardTransaction
 
 class User:
     id_counter = 1
-    
+
     def __init__(self, gmail, password, name, avatar, biography, location, website):
         self.id = User.id_counter
         User.id_counter += 1
@@ -33,19 +33,22 @@ class User:
             "website": self.__website
         }
         return creator_detail
-        
-    def back_project(self, project, credit_card, pledge_reward, bonus_cost):
-        if credit_card.money_left >= pledge_reward.reward_goal:
-            new_amount = credit_card.money_left - pledge_reward.reward_goal - bonus_cost
+
+def back_project(self, project, credit_card, pledge_reward, bonus_cost):
+        reward_goal = 0
+        if pledge_reward != "reward not found":
+            reward_goal = pledge_reward.reward_goal
+        if credit_card.money_left >= (reward_goal + bonus_cost):
+            new_amount = credit_card.money_left - reward_goal - bonus_cost
             credit_card.money_left = new_amount
-            print(f"lose {pledge_reward.reward_goal} bath from {credit_card}")
-            new_backing = Backing(self.id, project, pledge_reward, pledge_reward.reward_goal, bonus_cost)
+            print(f"lose {reward_goal + bonus_cost} baht from {credit_card}")
+            new_backing = Backing(self.id, project, pledge_reward, reward_goal, bonus_cost)
             self.__backings.append(new_backing)
-            project.add_backing(new_backing)
+            project.add_backing(new_backing, reward_goal)
             return "successful backing, money left = " + str(credit_card.money_left)
         else:
             return "insufficient fund"
-
+        
     def add_address(self, country, address_nickname, full_name, address, city, phone_number):
         new_address = Address(country, address_nickname, full_name, address, city, phone_number)
         self.__addresses.append(new_address)

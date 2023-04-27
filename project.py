@@ -31,6 +31,7 @@ class Project:
         self.__updates = []
         self.__backings = []
         self.__comments = []
+        self.__faqs = []
         self.__credit_card = None
 
     def add_backing(self, backing):
@@ -47,6 +48,18 @@ class Project:
             reward_goal, reward_name, reward_detail, reward_left, new_shipping
         )
         self.__pledge_rewards.append(new_reward)
+
+    def add_backing(self, backing, reward_goal):
+        self.__backings.append(backing)
+        self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
+        if reward_goal != 0:
+            backing.reward_item.reward_left = backing.reward_item.reward_left - 1
+
+    def add_faq(
+        self, faq
+    ):
+        if isinstance(faq, str):
+            self.__faqs.append(faq)
 
     def get_project_detail(self):
         project_detail = {
@@ -68,12 +81,12 @@ class Project:
                         for update in self.__updates]
         comments_list = [comment.get_comment_detail()
                          for comment in self.__comments]
-        print(updates_list)
 
         return {
             "project_detail": project_detail,
             "creator_detail": creator_detail,
             "pledge_rewards": pledge_rewards_list,
+            "faqs": self.__faqs,
             "updates": updates_list,
             "comments": comments_list,
         }
@@ -97,7 +110,7 @@ class Project:
         pass
 
     def create_comment(self, sending_time, text, writer):
-        new_comment = Comment(sending_time, text, writer)
+        new_comment = Comment(sending_time, text, writer.name)
         self.__comments.append(new_comment)
         return "comment successful"
 
@@ -112,15 +125,6 @@ class Project:
             if pledge_reward.id == id:
                 return pledge_reward
         return "reward not found"
-    
-    @property
-    def project_detail(self):
-        return self.__project_detail
-    
-    @project_detail.setter
-    def project_detail(self, new_project_detail):
-        if isinstance(new_project_detail, str):
-            self.__project_detail = new_project_detail
 
     def get_reward_from_id(self, id):
         for reward in self.__pledge_rewards:
@@ -133,6 +137,15 @@ class Project:
             if reward.id == reward_id:
                 self.__pledge_rewards.remove(reward)
                 return f"remove reward with id {reward_id} success!"
+                
+    @property
+    def project_detail(self):
+        return self.__project_detail
+    
+    @project_detail.setter
+    def project_detail(self, new_project_detail):
+        if isinstance(new_project_detail, str):
+            self.__project_detail = new_project_detail
             
     @property
     def pledge_rewards(self):
@@ -141,6 +154,11 @@ class Project:
     @property
     def pledge_goal(self):
         return self.__pledge_goal
+
+    @pledge_goal.setter
+    def pledge_goal(self, new_pledge_goal):
+        if isinstance(new_pledge_goal, int):
+            self.__pledge_goal
 
     @property
     def comments(self):
@@ -172,12 +190,13 @@ class Project:
         return self.__project_creator
 
     @property
-    def project_detail(self):
-        return self.__project_detail
+    def pledge_received(self):
+        return self.__pledge_received
 
-    @property
-    def pledge_rewards(self):
-        return self.__pledge_rewards
+    @pledge_received.setter
+    def pledge_received(self, new_value):
+        if isinstance(new_value, int) and new_value >= 0:
+            self.__pledge_received = new_value
 
     @property
     def credit_card(self):
@@ -186,11 +205,6 @@ class Project:
     @credit_card.setter
     def credit_card(self, new_credit_card):
         self.__credit_card = new_credit_card
-
-    @project_detail.setter
-    def project_detail(self, new_project_detail):
-        if isinstance(new_project_detail, str):
-            self.__project_detail = new_project_detail
 
     @project_name.setter
     def project_name(self, new_project_name):
@@ -201,10 +215,6 @@ class Project:
     def category(self, new_category):
         self.__category = new_category
 
-    @pledge_goal.setter
-    def pledge_goal(self, new_pledge_goal):
-        self.__pledge_goal = int(new_pledge_goal)
-
     @project_image.setter
     def project_image(self, new_project_image):
         if isinstance(new_project_image, str):
@@ -213,12 +223,6 @@ class Project:
     @project_duration.setter
     def project_duration(self, new_project_duration):
         self.__project_duration = int(new_project_duration)
-
-    @property
-    def pledge_received(self):
-        return self.__pledge_received
-
-    @pledge_received.setter
-    def pledge_received(self, new_value):
-        if isinstance(new_value, int) and new_value >= 0:
-            self.__pledge_received = new_value
+    
+    def number_of_backings(self):
+        return len(self.__backings)

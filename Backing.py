@@ -13,11 +13,11 @@ class Backing:
     @property
     def reward_cost(self):
         return self.__reward_cost
-
+    
     @property
     def project(self):
         return self.__project
-    
+
     @reward_cost.setter
     def reward_cost(self, value):
         if value >= 0:
