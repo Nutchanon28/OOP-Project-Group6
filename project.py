@@ -1,7 +1,8 @@
-from pledgereward import PledgeReward
+from credit_card_transaction import CreditCardTransaction
+from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
-
+from reward_shipping import RewardShipping
 
 class Project:
     id_counter = 1
@@ -12,7 +13,6 @@ class Project:
         category,
         project_image,
         project_duration,
-        project_detail,
         project_creator,
         pledge_goal
     ):
@@ -23,7 +23,7 @@ class Project:
         self.__category = category
         self.__project_image = project_image
         self.__project_duration = project_duration
-        self.__project_detail = project_detail
+        self.__project_detail = ""
         self.__project_creator = project_creator
         self.__pledge_goal = pledge_goal
         self.__pledge_received = 0
@@ -32,6 +32,22 @@ class Project:
         self.__backings = []
         self.__comments = []
         self.__faqs = []
+        self.__credit_card = None
+
+    def add_backing(self, backing):
+        self.__backings.append(backing)
+        self.pledge_received = self.pledge_received + \
+            backing.reward_cost + backing.bonus_cost
+        backing.reward_item.reward_left = backing.reward_item.reward_left - 1
+
+    def add_reward(
+        self, reward_goal, reward_name, reward_detail, reward_left, estimated_delivery, ships_to
+    ):
+        new_shipping = RewardShipping(estimated_delivery, ships_to)
+        new_reward = PledgeReward(
+            reward_goal, reward_name, reward_detail, reward_left, new_shipping
+        )
+        self.__pledge_rewards.append(new_reward)
 
     def add_backing(self, backing, reward_goal):
         self.__backings.append(backing)
@@ -65,8 +81,6 @@ class Project:
             "pledge_goal": self.__pledge_goal,
             "project_duration": self.__project_duration
         }
-        # creator_detail = self.__project_creator.get_creator_detail() # require Project to have User as an attribute
-        # project need to keep user's id instead of creator instance
         creator_detail = self.__project_creator.get_creator_detail()
 
         pledge_rewards_list = [
@@ -93,31 +107,6 @@ class Project:
     def set_reward_shipping(self, estimated_delivery, ships_to, old_reward_shipping):
         pass
 
-    def set_pledge_rewards(
-        self,
-        reward_goal,
-        reward_name,
-        reward_detail,
-        max_reward_backers,
-        reward_include,
-        old_pledge_reward,
-    ):
-        pass
-
-    def verify_creator_detail(
-        self,
-        legal_first_name,
-        legal_last_name,
-        email_address,
-        date_of_birth,
-        home_address,
-        city,
-        state,
-        postal_code,
-        phone_number,
-    ):
-        pass
-
     def create_comment(self, sending_time, text, writer):
         new_comment = Comment(sending_time, text, writer.name)
         self.__comments.append(new_comment)
@@ -134,9 +123,30 @@ class Project:
             if pledge_reward.id == id:
                 return pledge_reward
         return "reward not found"
+    
+    @property
+    def project_detail(self):
+        return self.__project_detail
+    
+    @project_detail.setter
+    def project_detail(self, new_project_detail):
+        if isinstance(new_project_detail, str):
+            self.__project_detail = new_project_detail
+
+    def get_reward_from_id(self, id):
+        for reward in self.__pledge_rewards:
+            print(f"id = {id} reward_id = {reward.id}")
+            if reward.id == id:
+                return reward
+
+    def delete_reward(self, reward_id):
+        for reward in self.__pledge_rewards:
+            if reward.id == reward_id:
+                self.__pledge_rewards.remove(reward)
+                return f"remove reward with id {reward_id} success!"
 
     @property
-    def pledge_reward(self):
+    def pledge_rewards(self):
         return self.__pleadge_rewards
 
     @property
@@ -147,6 +157,15 @@ class Project:
     def pledge_goal(self, new_pledge_goal):
         if isinstance(new_pledge_goal, int):
             self.__pledge_goal
+
+    @property
+    def comments(self):
+        return self.__comments
+
+    @comments.setter
+    def comments(self, new_comment):
+        if isinstance(new_comment, Comment):
+            self.__comments.append(new_comment)
 
     @property
     def project_name(self):
@@ -176,10 +195,14 @@ class Project:
     def pledge_received(self, new_value):
         if isinstance(new_value, int) and new_value >= 0:
             self.__pledge_received = new_value
-
+    
     @property
-    def project_detail(self):
-        return self.__project_detail
+    def credit_card(self):
+        return self.__credit_card
+
+    @credit_card.setter
+    def credit_card(self, new_credit_card):
+        self.__credit_card = new_credit_card
     
     def number_of_backings(self):
         return len(self.__backings)

@@ -3,145 +3,132 @@ from typing import Union
 from fastapi.middleware.cors import CORSMiddleware
 
 from project import Project
+from pledge_reward import PledgeReward
+from reward_shipping import RewardShipping
 from system import System
 from user import User
-from creditCardTransaction import CreditCardTransaction
+from credit_card_transaction import CreditCardTransaction
 
 import json
 from datetime import datetime
 
 system = System()
+
 user_jame = User(
-    "Jame", "face_photo", "Just a simple guy", "Bangkok", "jame_project.com"
+    "Jame@gmail.com",
+    "1234",
+    "Jame",
+    "face_photo",
+    "Just a simple guy",
+    "Thailand",
+    "jame_project.com",
 )
 system.add_user(user_jame)
 user_john = User(
-    "John", "face_photo", "Founder of clean air for all", "Changmai", "clean_air.com"
+    "John@gmail.com",
+    "2345",
+    "John",
+    "face_photo",
+    "Founder of clean air for all",
+    "Thailand",
+    "clean_air.com",
 )
 system.add_user(user_john)
 
 user_alice = User(
+    "Alice@gmail.com",
+    "3456",
     "Alice",
     "face_photo",
     "Lover of all things tech",
-    "San Francisco",
+    "Thailand",
     "alice.tech",
 )
 system.add_user(user_alice)
 
 user_bob = User(
+    "Bob@gmail.com",
+    "4567",
     "Bob",
     "face_photo",
     "Adventurer and storyteller",
-    "New York",
+    "Thailand",
     "bobadventures.com",
 )
 system.add_user(user_bob)
 
 project_vr_game = Project(
-    "Virtual Reality Game",
-    "gaming",
-    "https://i.ibb.co/rbmNB2R/virtual-reality-game.jpg",
-    "12-4-2023",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sagittis facilisis tortor. Integer justo ipsum, euismod vel lectus sed, sollicitudin facilisis elit. Phasellus posuere pharetra nibh sed pulvinar. Duis tempor ornare imperdiet. Phasellus fermentum nunc nec nisi dignissim interdum. Nunc eget tortor pellentesque nibh convallis vulputate ut non velit. Phasellus at mi eu diam tincidunt condimentum a id nunc.Maecenas dapibus fermentum lectus vel suscipit. Sed ac luctus nisl. Donec viverra a libero quis dapibus. Mauris faucibus pharetra metus. Aliquam semper ex ullamcorper est venenatis, sit amet lacinia mauris tincidunt. Nulla convallis semper mauris, vitae faucibus nibh varius sit amet. Quisque eu rutrum nisl. Aenean sem ligula, aliquam pulvinar consequat at, blandit sit amet augue. Suspendisse elementum neque nibh, a elementum eros bibendum ut.Praesent viverra eleifend eros, ut eleifend arcu pretium vitae. Donec posuere mattis nulla tristique vestibulum. Nullam id est varius, gravida ipsum cursus, laoreet tellus. Suspendisse vel sem bibendum, imperdiet ipsum ac, bibendum diam. Vestibulum fringilla iaculis hendrerit. Nullam molestie, odio accumsan sodales hendrerit, turpis justo gravida sapien, nec consequat magna dolor et tortor. Sed tempus lacus faucibus massa tempus, non egestas sem hendrerit. Integer hendrerit mi vel mollis venenatis. Integer malesuada neque quis orci euismod bibendum. Nulla id aliquet sem. Suspendisse pretium consequat lacus eu viverra. Pellentesque a justo convallis, blandit diam sed, condimentum magna. Sed dapibus lorem eget semper viverra.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aenean tincidunt lacinia urna, et vulputate leo congue vitae. Quisque eu tortor finibus, sollicitudin ipsum in, faucibus felis. Donec tristique turpis a varius pellentesque. Sed ac eleifend nunc. Cras eu lorem sem. Sed pellentesque turpis ut neque interdum, sit amet convallis dolor ullamcorper. Nulla facilisi. Integer tincidunt lobortis dui, in pulvinar enim mollis eget. Donec at elit mattis metus volutpat convallis non nec justo. Nunc bibendum odio semper quam condimentum aliquam.Nullam lectus quam, aliquam sed dapibus eget, pulvinar placerat leo. Etiam felis tortor, consequat id iaculis vel, sollicitudin sit amet ipsum. Mauris nisi nisi, consequat et sodales non, auctor nec elit. Donec a viverra nisi. Fusce ipsum ligula, iaculis id congue sit amet, gravida quis enim. In vestibulum pulvinar lacus, sit amet interdum tortor dictum at. Aenean pretium maximus mauris. Etiam maximus metus ullamcorper sollicitudin egestas. Nullam elementum fermentum accumsan.",
-    # "Experience a new dimension of gaming with our immersive virtual reality game!",
-    user_alice,
-    10000,
+    "Virtual Reality Game", "gaming", "image", "12-4-2023", user_alice, 10000
 )
+project_vr_game.project_detail = "abcdef"
+
+thailand = RewardShipping("20-4-2023", ["Bankok", "A", "B", "C"])
 project_vr_game.add_reward(
-    50, "Early Access", "Be one of the first to play our game!", "None", 200
+    50,
+    "Early Access",
+    "Be one of the first to play our game!",
+    200,
+    "20-4-2023",
+    ["Bankok", "A", "B", "C"],
 )
 project_vr_game.add_reward(
     100,
     "Custom Character",
     "Create your own character to use in the game!",
-    "None",
     100,
+    "20-4-2023",
+    ["Bankok", "A", "B", "C"],
 )
-
-project_vr_game.add_faq(
-    "Will this game have multiplayer?:Yes, we always intend to make our game playable by many people, and this game is no different."
-)
-
-project_vr_game.add_faq(
-    "Wil you release the game soundtracks?:That depends on John William."
-)
-
-project_vr_game.add_faq("Do you like Calculas?:no")
-
-project_vr_game.create_update(
-    "Cool New Soundtrack!",
-    "Alice",
-    "We have the privilege of having John Wiliam inventing new original soundtrack for our game. It's gonna be awesome!!!",
-    "https://i.ibb.co/NmQc6PL/john-william.jpg",
-)
-
-project_vr_game.create_update(
-    "Some difficulty...",
-    "Alice",
-    "I have crippling depression!",
-    "https://i.ibb.co/NmQc6PL/john-william.jpg",
-)
-
-project_vr_game.create_update(
-    "Cool New Soundtrack!",
-    "Alice",
-    "We have the privilege of having John Wiliam inventing new original soundtrack for our game. It's gonna be awesome!!!",
-    "https://i.ibb.co/NmQc6PL/john-william.jpg",
-)
-
 system.launch_project(project_vr_game)
 
 project_travel_blog = Project(
-    "Around the World Travel Blog",
-    "travel",
-    "https://i.ibb.co/H4dHsgM/travel-blog.jpg",
-    "15-5-2023",
-    "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!",
-    user_bob,
-    5000,
+    "Around the World Travel Blog", "travel", "image", "15-5-2023", user_bob, 5000
 )
+project_travel_blog.project_detail = "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!"
 project_travel_blog.add_reward(
-    25, "Travel Tips Ebook", "Learn our secrets for budget travel!", "digital", 500
+    25,
+    "Travel Tips Ebook",
+    "Learn our secrets for budget travel!",
+    500,
+    "20-4-2023",
+    ["Bankok", "A", "B", "C"],
 )
 project_travel_blog.add_reward(
     50,
     "Personalized Postcard",
     "Get a postcard from us during our travels!",
-    "physical",
     100,
+    "20-4-2023",
+    ["Bankok", "A", "B", "C"],
 )
-
-project_travel_blog.add_faq(
-    "What camera equipment do you use to take your photos?:Nikon D850"
-)
-
-project_travel_blog.add_faq("Do you like Calculas?:no.")
-
 system.launch_project(project_travel_blog)
-
+project_travel_blog.add_update(
+    "finished deal with publisher",
+    user_bob,
+    "make a big deal to print out 500 books in July in budget of 100 baht each",
+    "publisher.png",
+)
+project_travel_blog.add_update(
+    "plan the place to go in July",
+    user_bob,
+    "70% of plan has finished even how much expen",
+    "publisher.png",
+)
 # John create a project "clean air for all"
 project_clean_air = Project(
-    "Clean Air for All",
-    "health",
-    "https://i.ibb.co/Tct0n02/clean-air.jpg",
-    "11-4-2023",
-    "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath.",
-    user_john,
-    3300,
+    "clean air for all", "health", "image", "11-4-2023", user_john, 3300
 )
-
+project_clean_air.project_detail = "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath."
 # Green Energy for All
 project_green_energy = Project(
     "Green Energy for All",
     "Technology",
-    "https://i.ibb.co/hKDhXff/green-energy.jpg",
+    "green-energy.jpg",
     "5/1/2023 - 12/31/2023",
-    "Join us in our mission to create sustainable energy solutions for everyone. Our team of experts is developing innovative technologies that will revolutionize the way we generate and consume energy.",
     user_john,
     7500,
 )
-
+project_green_energy.project_detail = "Join us in our mission to create sustainable energy solutions for everyone. Our team of experts is developing innovative technologies that will revolutionize the way we generate and consume energy."
 
 system.launch_project(project_green_energy)
 
@@ -149,12 +136,14 @@ system.launch_project(project_green_energy)
 project_ai_business = Project(
     "Artificial Intelligence for Business",
     "Business",
-    "https://i.ibb.co/c3FMd9c/ai.jpg",
+    "ai-business.jpg",
     "6/1/2023 - 11/30/2023",
-    "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams.",
     user_alice,
     3200,
 )
+
+system.add_project(project_ai_business)
+project_ai_business = "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams."
 
 system.launch_project(project_ai_business)
 
@@ -162,12 +151,12 @@ system.launch_project(project_ai_business)
 project_music_festival = Project(
     "Music Festival in the Park",
     "Music",
-    "https://i.ibb.co/WxMsFm5/music-festival.jpg",
+    "music-festival.jpg",
     "7/15/2023 - 7/17/2023",
-    "Join us for a weekend of live music, food, and fun in the park! Our lineup features local and national acts across a variety of genres, and all proceeds will go towards supporting the park's maintenance and community programs.",
     user_bob,
     8800,
 )
+project_music_festival.project_detail = "Join us for a weekend of live music, food, and fun in the park! Our lineup features local and national acts across a variety of genres, and all proceeds will go towards supporting the park's maintenance and community programs."
 
 system.launch_project(project_music_festival)
 
@@ -175,12 +164,12 @@ system.launch_project(project_music_festival)
 project_oss_edu = Project(
     "Open Source Educational Software",
     "Education",
-    "https://i.ibb.co/VJzvxT6/open-source.png",
+    "oss-edu.jpg",
     "8/1/2023 - 12/31/2023",
-    "We believe that education should be accessible to everyone. That's why we're developing a suite of open source educational software that anyone can use, modify, and share. Join us in our mission to democratize learning!",
     user_jame,
     6540,
 )
+project_oss_edu.project_detail = "We believe that education should be accessible to everyone. That's why we're developing a suite of open source educational software that anyone can use, modify, and share. Join us in our mission to democratize learning!"
 
 system.launch_project(project_oss_edu)
 
@@ -190,10 +179,10 @@ project_sustainable_clothing = Project(
     "Fashion",
     "sustainable-clothing.jpg",
     "9/1/2023 - 2/28/2024",
-    "Fast fashion is taking a toll on our planet. That's why we're launching a sustainable clothing line made from eco-friendly materials and manufactured using ethical practices. Help us make fashion more sustainable!",
     user_alice,
     3500,
 )
+project_sustainable_clothing.project_detail = "Fast fashion is taking a toll on our planet. That's why we're launching a sustainable clothing line made from eco-friendly materials and manufactured using ethical practices. Help us make fashion more sustainable!"
 
 system.launch_project(project_sustainable_clothing)
 
@@ -203,10 +192,10 @@ project_community_garden = Project(
     "Food",
     "community-garden.jpg",
     "10/1/2023 - 12/31/2023",
-    "We're transforming an empty lot in the heart of the city into a vibrant community garden. Our vision is to create a space where anyone can come to grow, learn, and connect with their neighbors. Join us in creating a more sustainable and connected community!",
     user_bob,
     7700,
 )
+project_community_garden.project_detail = "We're transforming an empty lot in the heart of the city into a vibrant community garden. Our vision is to create a space where anyone can come to grow, learn, and connect with their neighbors. Join us in creating a more sustainable and connected community!"
 
 system.launch_project(project_community_garden)
 
@@ -216,15 +205,17 @@ project_mental_health_chatbot = Project(
     "Health",
     "mental-health-chatbot.jpg",
     "11/1/2023 - 4/30/2024",
-    "Mental health is just as important as physical health, but many people still struggle to access the care they need. That's why we're creating a chatbot that provides personalized mental health support and resources to anyone who needs it. Help us break down barriers to care!",
     user_bob,
     1234,
 )
+project_mental_health_chatbot.project_detail = "Mental health is just as important as physical health, but many people still struggle to access the care they need. That's why we're creating a chatbot that provides personalized mental health support and resources to anyone who needs it. Help us break down barriers to care!"
 
 system.launch_project(project_mental_health_chatbot)
 
 # John added a reward
-project_clean_air.add_reward(150, "Oxygen Tank", "It's large", "1 oxygen tank", 100)
+project_clean_air.add_reward(
+    150, "Oxygen Tank", "It's large", 100, "20-4-2023", ["Bankok", "A", "B", "C"]
+)
 
 # John lauched the project
 system.launch_project(project_clean_air)
@@ -234,13 +225,17 @@ user_jame.add_payment_method("Thailand", "000", "06/25", "420694206928")
 user_jame.add_payment_method("Thailand", "001", "06/25", "320694206928")
 user_jame.add_payment_method("Thailand", "002", "06/25", "220694206928")
 
-user_john.add_payment_method("Thailand", "123", "12/24", "1234567890123456")
-user_alice.add_payment_method("Thailand", "456", "09/27", "6543210987654321")
-user_bob.add_payment_method("Thailand", "789", "03/26", "9876543210987654")
+user_jame.back_project(
+    project_clean_air,
+    user_jame.payment_methods[0],
+    project_clean_air.pledge_rewards[0],
+    1000,
+)
+
 
 app = FastAPI()
 
-origins = ["http://localhost:3000"]
+origins = ["http://localhost:3000", "localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -285,6 +280,32 @@ async def get_all_project() -> dict:
         "total_money": total_money,
         "number_of_pledges": number_of_pledges,
     }
+
+
+@app.get("/view_project_list", tags=["View Project"])
+async def get_project_list() -> list:
+    projects = system.project_list
+    return projects
+
+
+@app.get("/view_backed_project", tags=["Backed Project"])
+async def get_backed_project(user_id: int) -> list:
+    # SD: View Backed Project??
+    current_user = system.get_user_from_id(user_id)
+    projects = current_user.get_backed_project()
+    projects_detail = []
+    for project in projects:
+        projects_detail.append(
+            {
+                "id": project.id,
+                "name": project.project_name,
+                "image": project.project_image,
+                "detail": project.project_detail,
+                "category": project.category,
+                "creator": project.project_creator.name,
+            }
+        )
+    return projects_detail
 
 
 @app.get("/view_project/{project_id}", tags=["View Project"])
@@ -348,3 +369,143 @@ async def back_the_project(input: dict) -> dict:
         selected_project, credit_card, reward, bonus_cost
     )
     return {"response": response}
+
+
+@app.get("/pledge_reward/{project_id}", tags=["Pledge Reward"])
+async def get_pledge_reward(project_id: int) -> list:
+    project = system.get_project_from_id(project_id)
+    rewards = project.pledge_rewards
+    return rewards
+    # reward_detail = project.get_pledge_reward_detail()
+    # return reward_detail
+
+
+@app.get("/view_all_project/{project_id}/get_reward_id", tags=["Pledge Reward"])
+async def get_reward_id(project_id: int) -> dict:
+    project = system.get_project_from_id(project_id)
+    return {"id": str(len(project.pledge_rewards) + 1)}
+
+
+@app.get("/get_last_project")
+async def get_last_project():
+    project = system.project_list
+    return project[-1]
+
+
+@app.post("/add_project", tags=["Add Project"])
+async def add_the_project(project_dict: dict) -> str:
+    # SD Start Project
+    project = Project(
+        project_dict["project_name"],
+        project_dict["category"],
+        project_dict["project_image"],
+        project_dict["project_duration"],
+        system.get_user_from_id(project_dict["creator_id"]),
+        project_dict["pledge_goal"],
+    )
+    system.add_project(project)
+    return "Success"
+
+
+@app.post("/edit_project/{project_id}/add_pledge_reward", tags=["Pledge Reward"])
+async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
+    project = system.get_project_from_id(project_id)
+    project.add_reward(
+        pledge_reward["_PledgeReward__reward_goal"],
+        pledge_reward["_PledgeReward__reward_name"],
+        pledge_reward["_PledgeReward__reward_detail"],
+        pledge_reward["_PledgeReward__reward_left"],
+        pledge_reward["_RewardShipping__estimated_delivery"],
+        pledge_reward["_RewardShipping__ships_to"],
+    )
+
+    return f"Add reward to project id {project_id}"
+
+
+@app.put("/edit_project/{project_id}/add_credit_card", tags=["Project"])
+async def add_credit_card(project_id: int, credit_card: dict) -> str:
+    # SD Set Payment Detail
+    project = system.get_project_from_id(project_id)
+    """
+    {
+        "legal_first_name": "Anne",
+        "legal_last_name": "Jukrajuthatip",
+        "email_address": "Anne@mou.ac.th",
+        "date_of_birth": {"date": 1, "month": 1, "year": 2000},
+        "home_address": "999/99",
+        "city": "Newyork",
+        "state": "USA",
+        "postal_code": "65140",
+        "phone_number": "0999999999",
+        "account_number": "123456789",
+        "bank": "muo bank"
+    }
+    """
+    new_credit_card = CreditCardTransaction(
+        credit_card["country"],
+        credit_card["cvc"],
+        credit_card["expiration"],
+        credit_card["card_number"],
+    )
+    project.credit_card = new_credit_card
+    return "yess"
+
+
+@app.put("/set_description/{id}", tags=["Edit Project"])
+async def set_project_desscription(id: int, new_description: str) -> str:
+    # SD Set Description เค้ายุบไปรวมกับ Edit Project
+    project = system.get_project_from_id(id)
+    project.project_detail = new_description
+    return f"The project with id {id} was edited!"
+
+
+@app.put("/edit_project/{project_id}", tags=["Project"])
+async def edit_project(project_id: int, new_project: dict) -> str:
+    # SD Edit Project
+    print(new_project)
+    project = system.get_project_from_id(project_id)
+    project.project_name = new_project["_Project__project_name"]
+    project.category = new_project["_Project__category"]
+    project.project_image = new_project["_Project__project_image"]
+    project.project_duration = new_project["_Project__project_duration"]
+    project.project_detail = new_project["_Project__project_detail"]
+    project.pledge_goal = new_project["_Project__pledge_goal"]
+    return f"The project with id {project_id} was edited!"
+
+
+@app.put(
+    "/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"]
+)
+async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
+    project = system.get_project_from_id(project_id)
+    reward = project.get_reward_from_id(reward_id)
+    reward.reward_goal = int(new_reward["_PledgeReward__reward_goal"])
+    reward.reward_name = new_reward["_PledgeReward__reward_name"]
+    reward.reward_detail = new_reward["_PledgeReward__reward_detail"]
+    reward.reward_include = new_reward["_PledgeReward__reward_include"]
+    reward.reward_backers = int(new_reward["_PledgeReward__reward_backers"])
+    reward.max_reward_backers = int(new_reward["_PledgeReward__max_reward_backers"])
+    reward.reward_shipping = RewardShipping(
+        new_reward["_RewardShipping__estimated_delivery"],
+        new_reward["_RewardShipping__ships_to"],
+        new_reward["_RewardShipping__address"],
+        int(new_reward["_RewardShipping__shipping_cost"]),
+    )
+    return "yessssssss"
+
+
+@app.post("/launch_project", tags=["Launch Project"])
+async def launch_project(id: int) -> str:
+    # SD: Launch Project
+    project = system.get_project_from_id(id)
+    system.launch_project(project)
+    return f"The project with id{id} was launched"
+
+
+@app.delete(
+    "/edit_project/{project_id}/delete_reward/{reward_id}", tags=["Pledge Reward"]
+)
+async def edit_reward(project_id: int, reward_id: int) -> str:
+    project = system.get_project_from_id(project_id)
+    project.delete_reward(reward_id)
+    return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"

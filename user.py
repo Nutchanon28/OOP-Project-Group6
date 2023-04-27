@@ -1,5 +1,7 @@
 from backing import Backing
-from creditCardTransaction import CreditCardTransaction
+from address import Address
+from comment import Comment
+from credit_card_transaction import CreditCardTransaction
 
 class User:
     id_counter = 1
@@ -13,9 +15,10 @@ class User:
         self.__biography = biography
         self.__location = location
         self.__website = website
+        self.__payment_methods = []
+        self.__addresses = []
         self.__backings = []
         self.__notifications = []
-        self.__payment_methods = []
 
     # user's method (view project)
     def get_creator_detail(self):
@@ -43,6 +46,11 @@ class User:
             return "successful backing, money left = " + str(credit_card.money_left)
         else:
             return "insufficient fund"
+        
+    def add_address(self, country, address_nickname, full_name, address, city, phone_number):
+        new_address = Address(country, address_nickname, full_name, address, city, phone_number)
+        self.__addresses.append(new_address)
+        return "finished add address"
 
     def add_payment_method(self, country, cvc, expiration, card_number):
         new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)
