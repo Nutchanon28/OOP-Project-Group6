@@ -35,5 +35,3 @@ class Backing:
             self.__bonus_cost = value
         else:
             raise ValueError("Bonus cost cannot be negative")
-
-    

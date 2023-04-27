@@ -58,7 +58,12 @@ user_bob = User(
 system.add_user(user_bob)
 
 project_vr_game = Project(
-    "Virtual Reality Game", "gaming", "image", "12-4-2023", user_alice, 10000
+    "Virtual Reality Game",
+    "Games",
+    "https://i.ibb.co/rbmNB2R/virtual-reality-game.jpg",
+    "12-4-2023",
+    user_alice,
+    10000,
 )
 project_vr_game.project_detail = "abcdef"
 
@@ -79,10 +84,47 @@ project_vr_game.add_reward(
     "20-4-2023",
     ["Bankok", "A", "B", "C"],
 )
+
+project_vr_game.add_faq(
+    "Will this game have multiplayer?:Yes, we always intend to make our game playable by many people, and this game is no different."
+)
+
+project_vr_game.add_faq(
+    "Wil you release the game soundtracks?:That depends on John William."
+)
+
+project_vr_game.add_faq("Do you like Calculas?:no")
+
+project_vr_game.create_update(
+    "Cool New Soundtrack!",
+    "Alice",
+    "We have the privilege of having John Wiliam inventing new original soundtrack for our game. It's gonna be awesome!!!",
+    "https://i.ibb.co/NmQc6PL/john-william.jpg",
+)
+
+project_vr_game.create_update(
+    "Some difficulty...",
+    "Alice",
+    "I have crippling depression!",
+    "https://i.ibb.co/NmQc6PL/john-william.jpg",
+)
+
+project_vr_game.create_update(
+    "Cool New Soundtrack!",
+    "Alice",
+    "We have the privilege of having John Wiliam inventing new original soundtrack for our game. It's gonna be awesome!!!",
+    "https://i.ibb.co/NmQc6PL/john-william.jpg",
+)
+
 system.launch_project(project_vr_game)
 
 project_travel_blog = Project(
-    "Around the World Travel Blog", "travel", "image", "15-5-2023", user_bob, 5000
+    "Around the World Travel Blog",
+    "Publishing",
+    "https://i.ibb.co/H4dHsgM/travel-blog.jpg",
+    "15-5-2023",
+    user_bob,
+    5000,
 )
 project_travel_blog.project_detail = "Follow our journey around the world as we share stories, photos, and tips for traveling on a budget!"
 project_travel_blog.add_reward(
@@ -116,14 +158,19 @@ project_travel_blog.add_update(
 )
 # John create a project "clean air for all"
 project_clean_air = Project(
-    "clean air for all", "health", "image", "11-4-2023", user_john, 3300
+    "clean air for all",
+    "Design & Tech",
+    "https://i.ibb.co/Tct0n02/clean-air.jpg",
+    "11-4-2023",
+    user_john,
+    3300,
 )
 project_clean_air.project_detail = "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath."
 # Green Energy for All
 project_green_energy = Project(
     "Green Energy for All",
-    "Technology",
-    "green-energy.jpg",
+    "Design & Tech",
+    "https://i.ibb.co/hKDhXff/green-energy.jpg",
     "5/1/2023 - 12/31/2023",
     user_john,
     7500,
@@ -135,8 +182,8 @@ system.launch_project(project_green_energy)
 # Artificial Intelligence for Business
 project_ai_business = Project(
     "Artificial Intelligence for Business",
-    "Business",
-    "ai-business.jpg",
+    "Design & Tech",
+    "https://i.ibb.co/c3FMd9c/ai.jpg",
     "6/1/2023 - 11/30/2023",
     user_alice,
     3200,
@@ -151,7 +198,7 @@ system.launch_project(project_ai_business)
 project_music_festival = Project(
     "Music Festival in the Park",
     "Music",
-    "music-festival.jpg",
+    "https://i.ibb.co/WxMsFm5/music-festival.jpg",
     "7/15/2023 - 7/17/2023",
     user_bob,
     8800,
@@ -163,8 +210,8 @@ system.launch_project(project_music_festival)
 # Open Source Educational Software
 project_oss_edu = Project(
     "Open Source Educational Software",
-    "Education",
-    "oss-edu.jpg",
+    "Design & Tech",
+    "https://i.ibb.co/VJzvxT6/open-source.png",
     "8/1/2023 - 12/31/2023",
     user_jame,
     6540,
@@ -176,8 +223,8 @@ system.launch_project(project_oss_edu)
 # Sustainable Clothing Line
 project_sustainable_clothing = Project(
     "Sustainable Clothing Line",
-    "Fashion",
-    "sustainable-clothing.jpg",
+    "Arts",
+    "https://www.travelmyglobe.com/images/Uploaded/Thailand/TravelMyGlobe_Thailand_Fashion_Island_1.jpg",
     "9/1/2023 - 2/28/2024",
     user_alice,
     3500,
@@ -189,8 +236,8 @@ system.launch_project(project_sustainable_clothing)
 # Community Garden
 project_community_garden = Project(
     "Community Garden",
-    "Food",
-    "community-garden.jpg",
+    "Food & Craft",
+    "https://i.swncdn.com/media/1600w/via/9367-flickr-faunggs-photos.webp",
     "10/1/2023 - 12/31/2023",
     user_bob,
     7700,
@@ -202,8 +249,8 @@ system.launch_project(project_community_garden)
 # Mental Health Chatbot
 project_mental_health_chatbot = Project(
     "Mental Health Chatbot",
-    "Health",
-    "mental-health-chatbot.jpg",
+    "Design & Tech",
+    "https://i.guim.co.uk/img/media/923e999c85695caf0511d471aec90d534024c287/0_438_3500_2100/master/3500.jpg?width=620&quality=85&auto=format&fit=max&s=3ac8370a6e8314d8d9a6440cf1d973d5",
     "11/1/2023 - 4/30/2024",
     user_bob,
     1234,
