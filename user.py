@@ -1,6 +1,7 @@
 from backing import Backing
 from address import Address
 from comment import Comment
+from notification import Notification
 from credit_card_transaction import CreditCardTransaction
 
 class User:
@@ -70,6 +71,10 @@ class User:
     def notifications(self):
         return self.__notifications
     
+    def add_new_notification(self, new_notification):
+        self.__notifications.append(new_notification)
+        return "append notification success"
+        
     @property
     def payment_methods(self):
         return self.__payment_methods

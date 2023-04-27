@@ -1,5 +1,5 @@
 class Notification:
-    def __init__(self, title, detail, sending_time):
+    def __init__(self, sender, title, detail):
+        self.__sender = sender
         self.__title = title
         self.__detail = detail
-        self.__sending_time = sending_time
