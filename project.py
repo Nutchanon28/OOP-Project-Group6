@@ -55,15 +55,6 @@ class Project:
         if reward_goal != 0:
             backing.reward_item.reward_left = backing.reward_item.reward_left - 1
 
-    # set_pledge_reward
-    def add_reward(
-        self, reward_goal, reward_name, reward_detail, reward_include, reward_left
-    ):
-        new_reward = PledgeReward(
-            reward_goal, reward_name, reward_detail, reward_include, reward_left
-        )
-        self.__pledge_rewards.append(new_reward)
-
     def add_faq(
         self, faq
     ):
@@ -97,6 +88,12 @@ class Project:
             "updates": updates_list,
             "comments": comments_list,
         }
+    
+    def add_update(self, update_title, update_creator, update_detail, update_image):
+        new_update = Update(update_title, update_creator,
+                            update_detail, update_image)
+        self.__updates.append(new_update)
+        return "finished add update"
 
     def get_creator_detail(self):
         pass
@@ -147,7 +144,7 @@ class Project:
 
     @property
     def pledge_rewards(self):
-        return self.__pleadge_rewards
+        return self.__pledge_rewards
 
     @property
     def pledge_goal(self):

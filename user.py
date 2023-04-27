@@ -6,10 +6,12 @@ from credit_card_transaction import CreditCardTransaction
 class User:
     id_counter = 1
 
-    def __init__(self, name, avatar, biography, location, website):
+    def __init__(self, gmail, password, name, avatar, biography, location, website):
         self.id = User.id_counter
         User.id_counter += 1
 
+        self.__gmail = gmail
+        self.__password = password
         self.__name = name
         self.__avatar = avatar
         self.__biography = biography
@@ -61,6 +63,12 @@ class User:
             if credit_card.id == id:
                 return credit_card
         return "credit card not found"
+    
+    def get_backed_project(self):
+        backed_projects = []
+        for backing in self.__backings:
+            backed_projects.append(backing.project)
+        return backed_projects
 
     @property
     def name(self):
