@@ -113,7 +113,7 @@ class Project:
         pass
       
     def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(self, update_title, update_creator, update_detail ,update_image)
+        new_update = Update(update_title, update_creator, update_detail ,update_image)
         self.__updates.append(new_update)
         update_detail = new_update.get_update_detail()
         receiver = []
@@ -122,7 +122,7 @@ class Project:
         new_notification = Notification(
             update_creator,
             "have new update on your backed project: " + str(self.__project_name), 
-            "new update: " + str(update_detail.update_title) + "\n" + "detail:" + str(update_detail.update_detail) + "\n"
+            "new update: " + str(update_detail["update_title"]) + "\n" + "detail:" + str(update_detail["update_detail"]) + "\n"
             )
         self.send_notification(
             receiver, 
@@ -139,12 +139,6 @@ class Project:
         new_comment = Comment(sending_time, text, writer)
         self.__comments.append(new_comment)
         return "comment successful"
-
-    def create_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail, update_image)
-        self.__updates.append(new_update)
-        # print(f"title: {new_update.update_title} \ncreator: {new_update.update_creator} \ndetail: {new_update.update_detail} \nimage: {new_update.update_image}")
-        return "finished add update"
     
     def get_reward_from_id(self, id):
         for pledge_reward in self.__pledge_rewards:

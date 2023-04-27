@@ -224,6 +224,9 @@ user_jame.back_project(project_clean_air, user_jame.payment_methods[0], project_
 user_jame.back_project(project_green_energy, user_jame.payment_methods[1], project_clean_air.pledge_rewards[0],1000)
 user_jame.back_project(project_music_festival, user_jame.payment_methods[2], project_clean_air.pledge_rewards[0],1000)
 
+project_clean_air.add_update("survey area fo starting project", user_john, "surveying results are around Bankok and Pathumthani", "https://www.kaohoon.com/wp-content/uploads/2023/01/2023-01-05_%E0%B8%81%E0%B8%97%E0%B8%A1.-%E0%B9%80%E0%B8%95%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%A1%E0%B9%80%E0%B8%9D%E0%B9%89%E0%B8%B2%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B1%E0%B8%87%E0%B8%9D%E0%B8%B8%E0%B9%88%E0%B8%99-PM2.5.jpg")
+project_clean_air.add_update("start build air cleaner module", user_john, "build module for install as a part of machiene", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHDzGvUUUnCJnkDfJlzC87Y9S6Tosn5z6sqA&usqp=CAU")
+
 app = FastAPI()
 
 origins = [
@@ -297,6 +300,23 @@ async def get_backed_project(user_id: int) -> list:
         )
     return projects_detail
 
+@app.get("/view_notifications/{user_id}", tags=["Notifications"])
+async def get_user_notifications(user_id: int) -> list:
+    # SD: View Backed Project??
+    current_user = system.get_user_from_id(user_id)
+    notifications = current_user.notifications
+    notifications_detail = []
+    for notification in notifications:
+        notifications_detail.append(
+            {
+                "sender": notification.sender.name,
+                "title": notification.title,
+                "detail": notification.detail
+            }
+        )
+    return notifications_detail
+
+
 @app.get("/view_project/{project_id}", tags=["View Project"])
 async def get_project(project_id: int) -> dict:
     # SD: View Project
@@ -369,7 +389,8 @@ async def add_update(
     current_user = system.get_user_from_id(user_id)
     selected_project = system.get_project_from_id(project_id)
     response = selected_project.add_update(
-        update_title, current_user, update_detail, update_image
+        update_title, current_user.name, update_detail, update_image
     )
     return {"response": response}
+
 
