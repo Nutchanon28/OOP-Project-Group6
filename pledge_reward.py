@@ -1,4 +1,3 @@
-
 class PledgeReward:
     id_counter = 1
 
@@ -77,3 +76,4 @@ class PledgeReward:
     @reward_shipping.setter
     def reward_shipping(self, shipping):
         self.__reward_shipping = shipping
+

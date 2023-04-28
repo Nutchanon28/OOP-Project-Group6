@@ -26,3 +26,4 @@ class CreditCardTransaction:
         print("money left setter")
         if isinstance(new_amount, int) and new_amount >= 0:
             self.__money_left = new_amount
+
