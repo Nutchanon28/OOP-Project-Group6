@@ -23,9 +23,11 @@ class User:
         self.__backings = []
         self.__notifications = []
 
-    def edit_account(self, gmail, password):
-        self.gmail = gmail
-        self.password = password
+    def edit_account(self, gmail, old_password, new_password):
+        if old_password == self.__password:
+            if new_password != "":
+                self.__password = new_password
+            self.gmail = gmail
 
     def edit_profile(self, name, avatar, biography, location, website):
         self.name = name
@@ -35,12 +37,12 @@ class User:
         self.website = website
 
     def create_address(self, country, address_nickname, full_name, address, city, phone_number):
-        self.__address_list.append(Address(country, address_nickname, full_name, address, city, phone_number))
+        self.__addresses.append(Address(country, address_nickname, full_name, address, city, phone_number))
 
     def delete_address(self, id):
-        for address in self.__address_list:
+        for address in self.__addresses:
             if id == address.id:
-                self.__address_list.remove(address)
+                self.__addresses.remove(address)
                 return "delete address successfully"
     
     def add_payment_method(self, country, cvc, expiration, card_number):

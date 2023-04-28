@@ -605,16 +605,14 @@ async def get_user(user_id: int):
 
 @app.put("/add_profile", tags=['profile'])
 async def add_profile(user_id: int, user: dict) -> str:
-    print(user)
     the_user = system.get_user_from_id(user_id)
     the_user.edit_profile(user["name"], user["avatar"], user["biography"], user["location"], user["website"])
     return "edit profile success"
 
 @app.put("/add_account", tags=['account'])
 async def add_account(user_id: int, user: dict) -> str:
-    print(user)
     the_user = system.get_user_from_id(user_id)
-    the_user.edit_account(user["gmail"], user["password"])
+    the_user.edit_account(user["gmail"], user["old_password"], user["new_password"])
     return "edit account success"
 
 @app.get("/get_payment_method", tags=['creditcard'])
