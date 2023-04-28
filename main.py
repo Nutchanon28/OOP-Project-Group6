@@ -13,25 +13,24 @@ import json
 from datetime import datetime
 
 system = System()
-
 user_jame = User(
-    "Jame@gmail.com",
-    "1234",
-    "Jame",
-    "face_photo",
-    "Just a simple guy",
+    "Jame@gmail.com", 
+    "1234", 
+    "Jame", 
+    "https://1734811051.rsc.cdn77.org/data/images/full/393261/discord-avatars-now-usable-for-premium-nitro-tier-subscribers-plus-scheduled-events-feature.jpg", 
     "Thailand",
-    "jame_project.com",
+    "Just a simple guy", 
+    "jame_project.com"
 )
 system.add_user(user_jame)
 user_john = User(
-    "John@gmail.com",
-    "2345",
-    "John",
-    "face_photo",
-    "Founder of clean air for all",
+    "John@gmail.com", 
+    "2345", 
+    "John", 
+    "https://cdn.nerdschalk.com/wp-content/uploads/2023/02/why-is-discord-avatar-blurry.png", 
+    "Founder of clean air for all", 
     "Thailand",
-    "clean_air.com",
+    "clean_air.com"
 )
 system.add_user(user_john)
 
@@ -39,7 +38,7 @@ user_alice = User(
     "Alice@gmail.com",
     "3456",
     "Alice",
-    "face_photo",
+    "https://pbs.twimg.com/tweet_video_thumb/DBBAK32XkAA-VCz.jpg",
     "Lover of all things tech",
     "Thailand",
     "alice.tech",
@@ -50,7 +49,7 @@ user_bob = User(
     "Bob@gmail.com",
     "4567",
     "Bob",
-    "face_photo",
+    "https://cdn.siasat.com/wp-content/uploads/2021/05/Discord.jpg",
     "Adventurer and storyteller",
     "Thailand",
     "bobadventures.com",
@@ -59,7 +58,7 @@ system.add_user(user_bob)
 
 project_vr_game = Project(
     "Virtual Reality Game",
-    "Games",
+    "gaming",
     "https://i.ibb.co/rbmNB2R/virtual-reality-game.jpg",
     "12-4-2023",
     user_alice,
@@ -121,7 +120,7 @@ system.launch_project(project_vr_game)
 project_travel_blog = Project(
     "Around the World Travel Blog",
     "Publishing",
-    "https://i.ibb.co/H4dHsgM/travel-blog.jpg",
+    "https://www.connollycove.com/wp-content/uploads/2022/01/vibrant-flowers-and-bicycle-bike-on-a-bridge-of-amsterdam-at-early-evening-twilight-on-SBI-336667208-1024x683.jpg",
     "15-5-2023",
     user_bob,
     5000,
@@ -183,7 +182,7 @@ system.launch_project(project_green_energy)
 project_ai_business = Project(
     "Artificial Intelligence for Business",
     "Design & Tech",
-    "https://i.ibb.co/c3FMd9c/ai.jpg",
+    "https://www.airswift.com/hubfs/3d-rendering-robot-learning-machine-education.png",
     "6/1/2023 - 11/30/2023",
     user_alice,
     3200,
@@ -211,7 +210,7 @@ system.launch_project(project_music_festival)
 project_oss_edu = Project(
     "Open Source Educational Software",
     "Design & Tech",
-    "https://i.ibb.co/VJzvxT6/open-source.png",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN_7_vPx7I-_8uiLyxwPeGj0Jg_di0W2YBwQ&usqp=CAU",
     "8/1/2023 - 12/31/2023",
     user_jame,
     6540,
@@ -224,7 +223,7 @@ system.launch_project(project_oss_edu)
 project_sustainable_clothing = Project(
     "Sustainable Clothing Line",
     "Arts",
-    "https://www.travelmyglobe.com/images/Uploaded/Thailand/TravelMyGlobe_Thailand_Fashion_Island_1.jpg",
+    "https://assets.bizclikmedia.net/668/677498f55ceb679934c22fa1555909a2:517f423e3e5afa70cf909078016b6ec8/packaging-900x-jpeg.webp",
     "9/1/2023 - 2/28/2024",
     user_alice,
     3500,
@@ -250,7 +249,7 @@ system.launch_project(project_community_garden)
 project_mental_health_chatbot = Project(
     "Mental Health Chatbot",
     "Design & Tech",
-    "https://i.guim.co.uk/img/media/923e999c85695caf0511d471aec90d534024c287/0_438_3500_2100/master/3500.jpg?width=620&quality=85&auto=format&fit=max&s=3ac8370a6e8314d8d9a6440cf1d973d5",
+    "https://i0.wp.com/images-prod.healthline.com/hlcmsresource/images/July-18/8054-Mental_Health_Chat_Bots-1296X728-Header.jpg?w=1155&h=1528",
     "11/1/2023 - 4/30/2024",
     user_bob,
     1234,
@@ -279,7 +278,6 @@ user_jame.back_project(
     1000,
 )
 
-
 app = FastAPI()
 
 origins = ["http://localhost:3000", "localhost:3000"]
@@ -292,6 +290,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/view_user", tags=["View User"])
+async def get_user(
+    userId: Union[int, None] = 1
+) -> dict:
+    user = system.get_user_from_id(userId)
+    user_detail = (
+            {
+                "gmail": user.gmail,
+                "password": user.password,
+                "name": user.name,
+                "avatar": user.avatar,
+                "biography": user.biography,
+                "website": user.website
+            }
+    )
+    return user_detail
 
 @app.get("/view_all_project", tags=["View Project"])
 async def get_all_project() -> dict:
@@ -348,6 +362,22 @@ async def get_backed_project(user_id: int) -> list:
             }
         )
     return projects_detail
+
+@app.get("/view_notifications/{user_id}", tags=["Notifications"])
+async def get_user_notifications(user_id: int) -> list:
+    # SD: View Backed Project??
+    current_user = system.get_user_from_id(user_id)
+    notifications = current_user.notifications
+    notifications_detail = []
+    for notification in notifications:
+        notifications_detail.append(
+            {
+                "sender": notification.sender,
+                "title": notification.title,
+                "detail": notification.detail
+            }
+        )
+    return notifications_detail
 
 
 @app.get("/view_project/{project_id}", tags=["View Project"])
@@ -551,3 +581,21 @@ async def edit_reward(project_id: int, reward_id: int) -> str:
     project = system.get_project_from_id(project_id)
     project.delete_reward(reward_id)
     return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
+
+@app.post("/add_update", tags=["Add Update"])
+async def add_update(
+    project_id: int,
+    user_id: int,
+    update_title: str,
+    update_detail: str,
+    update_image: str,
+) -> dict:
+    # SD: Add Update
+    current_user = system.get_user_from_id(user_id)
+    selected_project = system.get_project_from_id(project_id)
+    response = selected_project.add_update(
+        update_title, current_user.name, update_detail, update_image
+    )
+    return {"response": response}
+
+

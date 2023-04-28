@@ -1,6 +1,7 @@
 from backing import Backing
 from address import Address
 from comment import Comment
+from notification import Notification
 from credit_card_transaction import CreditCardTransaction
 
 class User:
@@ -42,7 +43,7 @@ class User:
             new_amount = credit_card.money_left - reward_goal - bonus_cost
             credit_card.money_left = new_amount
             print(f"lose {reward_goal + bonus_cost} baht from {credit_card}")
-            new_backing = Backing(self.id, project, pledge_reward, reward_goal, bonus_cost)
+            new_backing = Backing(self, project, pledge_reward, reward_goal, bonus_cost)
             self.__backings.append(new_backing)
             project.add_backing(new_backing, reward_goal)
             return "successful backing, money left = " + str(credit_card.money_left)
@@ -74,6 +75,10 @@ class User:
     def notifications(self):
         return self.__notifications
     
+    def add_new_notification(self, new_notification):
+        self.__notifications.append(new_notification)
+        return "append notification success"
+        
     @property
     def payment_methods(self):
         return self.__payment_methods

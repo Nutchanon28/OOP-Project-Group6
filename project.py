@@ -3,6 +3,7 @@ from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
 from reward_shipping import RewardShipping
+from notification import Notification
 
 class Project:
     id_counter = 1
@@ -34,11 +35,11 @@ class Project:
         self.__faqs = []
         self.__credit_card = None
 
-    def add_backing(self, backing):
-        self.__backings.append(backing)
-        self.pledge_received = self.pledge_received + \
-            backing.reward_cost + backing.bonus_cost
-        backing.reward_item.reward_left = backing.reward_item.reward_left - 1
+    # def add_backing(self, backing):
+    #     self.__backings.append(backing)
+    #     self.pledge_received = self.pledge_received + \
+    #         backing.reward_cost + backing.bonus_cost
+    #     backing.reward_item.reward_left = backing.reward_item.reward_left - 1
 
     def add_reward(
         self, reward_goal, reward_name, reward_detail, reward_left, estimated_delivery, ships_to
@@ -137,6 +138,31 @@ class Project:
             if reward.id == reward_id:
                 self.__pledge_rewards.remove(reward)
                 return f"remove reward with id {reward_id} success!"
+            
+    def add_update(self, update_title, update_creator, update_detail, update_image):
+        new_update = Update(update_title, update_creator, update_detail ,update_image)
+        self.__updates.append(new_update)
+        update_detail = new_update.get_update_detail()
+        receiver = []
+        for backing in self.__backings:
+            print("backing = ", backing)
+            receiver.append(backing.backer)
+        new_notification = Notification(
+            update_creator,
+            "have new update on your backed project: " + str(self.__project_name), 
+            "new update: " + str(update_detail["update_title"]) + "\n" + "detail:" + str(update_detail["update_detail"]) + "\n"
+            )
+        self.send_notification(
+            receiver, 
+            new_notification
+            )
+        return new_update
+    
+    def send_notification(self, send_to, new_notification):
+        print(send_to)
+        for user in send_to:
+            user.add_new_notification(new_notification)
+        return "send notification successful"
                 
     @property
     def project_detail(self):
