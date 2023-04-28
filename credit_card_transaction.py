@@ -4,7 +4,7 @@ class CreditCardTransaction:
     def __init__(self, country, cvc, expiration, card_number):
         self.id = CreditCardTransaction.id_counter
         CreditCardTransaction.id_counter += 1
-    
+
         self.__country = country
         self.__cvc = cvc
         self.__expiration = expiration
@@ -26,3 +26,4 @@ class CreditCardTransaction:
         print("money left setter")
         if isinstance(new_amount, int) and new_amount >= 0:
             self.__money_left = new_amount
+

@@ -252,3 +252,4 @@ class Project:
     
     def number_of_backings(self):
         return len(self.__backings)
+

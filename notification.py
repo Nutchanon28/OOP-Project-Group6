@@ -1,3 +1,4 @@
+
 class Notification:
     def __init__(self, sender, title, detail):
         self.__sender = sender

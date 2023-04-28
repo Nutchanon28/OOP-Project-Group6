@@ -23,6 +23,35 @@ class User:
         self.__backings = []
         self.__notifications = []
 
+    def edit_account(self, gmail, password):
+        self.gmail = gmail
+        self.password = password
+
+    def edit_profile(self, name, avatar, biography, location, website):
+        self.name = name
+        self.avatar = avatar
+        self.biography = biography
+        self.location = location
+        self.website = website
+
+    def create_address(self, country, address_nickname, full_name, address, city, phone_number):
+        self.__address_list.append(Address(country, address_nickname, full_name, address, city, phone_number))
+
+    def delete_address(self, id):
+        for address in self.__address_list:
+            if id == address.id:
+                self.__address_list.remove(address)
+                return "delete address successfully"
+    
+    def add_payment_method(self, country, cvc, expiration, card_number):
+        self.__payment_methods.append(CreditCardTransaction(country, cvc, expiration, card_number))
+
+    def delete_payment_method(self, id):
+        for creditcard in self.__payment_methods:
+            if id == creditcard.id:
+                self.__payment_methods.remove(creditcard)
+                return "delete creditcard successfully"
+    
     # user's method (view project)
     def get_creator_detail(self):
         # creator (User) is keep in System, but also here ??
@@ -71,13 +100,13 @@ class User:
             backed_projects.append(backing.project)
         return backed_projects
     
-    @property
-    def notifications(self):
-        return self.__notifications
-    
     def add_new_notification(self, new_notification):
         self.__notifications.append(new_notification)
         return "append notification success"
+        
+    @property
+    def notifications(self):
+        return self.__notifications
         
     @property
     def payment_methods(self):
@@ -87,7 +116,13 @@ class User:
     def addresses(self):
         return self.__addresses
     
-    @property
+    @gmail.setter
+    def gmail(self, new_gmail):
+        if isinstance(new_gmail, str) and "@" in new_gmail:
+            self.__gmail = new_gmail
+        else:
+            print("!!!!!Please enter a valid gmail.")
+            
     def name(self):
         return self.__name
     
@@ -99,47 +134,65 @@ class User:
     def gmail(self):
         return self.__gmail
     
-    @gmail.setter
-    def gmail(self, gmail):
-        self.__gmail = gmail
-    
     @property
     def password(self):
         return self.__password
-    
-    @password.setter
-    def password(self, password):
-        self.__password = password
     
     @property
     def avatar(self):
         return self.__avatar
     
-    @avatar.setter
-    def avatar(self, avatar):
-        self.__avatar = avatar
-    
     @property
     def biography(self):
         return self.__biography
     
-    @biography.setter
-    def biography(self, biography):
-        self.__biography = biography
     
     @property
     def location(self):
         return self.__location
     
-    @location.setter
-    def location(self, location):
-        self.__location = location
-    
     @property
     def website(self):
         return self.__website
     
-    @website.setter
-    def website(self, website):
-        self.__website = website
+    @password.setter
+    def password(self, new_password):
+        if isinstance(new_password, str):
+            self.__password = new_password
+        else:
+            print("!!!!!Please enter a valid password.")
 
+    @name.setter
+    def name(self, new_name):
+        if isinstance(new_name, str):
+            self.__name = new_name
+        else:
+            print("!!!!!Please enter a valid name.")
+
+    @avatar.setter
+    def avatar(self, new_avatar):
+        if isinstance(new_avatar, str):
+            self.__avatar = new_avatar
+        else:
+            print("!!!!!Please enter a valid avatar.")
+
+    @biography.setter
+    def biography(self, new_biography):
+        if isinstance(new_biography, str):
+            self.__biography = new_biography
+        else:
+            print("!!!!!Please enter a valid biography.")
+
+    @location.setter
+    def location(self, new_location):
+        if isinstance(new_location, str):
+            self.__location = new_location
+        else:
+            print("!!!!!Please enter a valid location.")
+
+    @website.setter
+    def website(self, new_website):
+        if isinstance(new_website, str):
+            self.__website = new_website
+        else:
+            print("!!!!!Please enter a valid website.")

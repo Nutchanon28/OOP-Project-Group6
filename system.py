@@ -40,9 +40,15 @@ class System:
 
         return my_projects
 
-    def delete_project(self, project):
-        if project in self.__project_list:
-            self.__project_list.remove(project)
+    def delete_project(self, project_id):
+        for project in self.__project_list:
+            if project_id == project.id:
+                self.__project_list.remove(project)
+                return "remove successfully"
+        for project in self.__launched_projects:
+            if project_id == project.id:
+                self.__launched_projects.remove(project)
+                return "remove successfully"
 
     def launch_project(self, project):
         if isinstance(project, Project):
@@ -61,15 +67,6 @@ class System:
                 searched_projects.append(project)
         return searched_projects
 
-    def create_notification(self):
-        pass
-
-    def get_project_list(self):
-        pass
-
-    def get_launched_projects(self):
-        pass
-
     @property
     def project_list(self):
         return self.__project_list
@@ -79,13 +76,6 @@ class System:
         return self.__user_list
 
     @property
-    def user_list(self):
-        return self.__user_list
-    
-    @property
-    def user_list(self):
-        return self.__user_list
-    
-    @property
     def launched_projects(self):
         return self.__launched_projects
+
