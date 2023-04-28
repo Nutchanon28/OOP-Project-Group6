@@ -7,7 +7,7 @@ from credit_card_transaction import CreditCardTransaction
 class User:
     id_counter = 1
 
-    def __init__(self, gmail, password, name, avatar, biography, location, website):
+    def __init__(self, gmail, password, name, avatar, location, biography, website):
         self.id = User.id_counter
         User.id_counter += 1
 
@@ -15,8 +15,8 @@ class User:
         self.__password = password
         self.__name = name
         self.__avatar = avatar
-        self.__biography = biography
         self.__location = location
+        self.__biography = biography
         self.__website = website
         self.__payment_methods = []
         self.__addresses = []
@@ -72,7 +72,7 @@ class User:
             new_amount = credit_card.money_left - reward_goal - bonus_cost
             credit_card.money_left = new_amount
             print(f"lose {reward_goal + bonus_cost} baht from {credit_card}")
-            new_backing = Backing(self, project, pledge_reward, reward_goal, bonus_cost)
+            new_backing = Backing(self.id, project.id, pledge_reward, reward_goal, bonus_cost)
             self.__backings.append(new_backing)
             project.add_backing(new_backing, reward_goal)
             return "successful backing, money left = " + str(credit_card.money_left)
@@ -95,6 +95,7 @@ class User:
         return "credit card not found"
 
     def get_backed_project(self):
+        # TODO: recursion bug
         backed_projects = []
         for backing in self.__backings:
             backed_projects.append(backing.project)
@@ -115,20 +116,10 @@ class User:
     @property
     def addresses(self):
         return self.__addresses
-    
-    @gmail.setter
-    def gmail(self, new_gmail):
-        if isinstance(new_gmail, str) and "@" in new_gmail:
-            self.__gmail = new_gmail
-        else:
-            print("!!!!!Please enter a valid gmail.")
-            
+
+    @property  
     def name(self):
         return self.__name
-    
-    @name.setter
-    def name(self, name):
-        self.__name = name
     
     @property
     def gmail(self):
@@ -145,7 +136,6 @@ class User:
     @property
     def biography(self):
         return self.__biography
-    
     
     @property
     def location(self):
@@ -168,6 +158,13 @@ class User:
             self.__name = new_name
         else:
             print("!!!!!Please enter a valid name.")
+
+    @gmail.setter
+    def gmail(self, new_gmail):
+        if isinstance(new_gmail, str) and "@" in new_gmail:
+            self.__gmail = new_gmail
+        else:
+            print("!!!!!Please enter a valid gmail.")
 
     @avatar.setter
     def avatar(self, new_avatar):

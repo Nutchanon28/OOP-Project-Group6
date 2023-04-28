@@ -147,6 +147,7 @@ class Project:
         for backing in self.__backings:
             print("backing = ", backing)
             receiver.append(backing.backer)
+        # TODO: ใส่ User ทั้ง class เป็น receiver จะทำให้เกิด recursion, แก้ให้ใส่ id แทน
         new_notification = Notification(
             update_creator,
             "have new update on your backed project: " + str(self.__project_name), 
