@@ -2,30 +2,27 @@ class CreditCardTransaction:
     id_counter = 1
 
     def __init__(self, country, cvc, expiration, card_number):
-        self.__id = CreditCardTransaction.id_counter
+        self.id = CreditCardTransaction.id_counter
         CreditCardTransaction.id_counter += 1
 
         self.__country = country
         self.__cvc = cvc
         self.__expiration = expiration
         self.__card_number = card_number
+        self.__money_left = 10000
+
+    def edit_credit_card(self, country, cvc, expiration, card_number):
+        self.__country = country
+        self.__cvc = cvc
+        self.__expiration = expiration
+        self.__card_number = card_number
 
     @property
-    def id(self):
-        return self.__id
-
-    @property
-    def country(self):
-        return self.__country
+    def money_left(self):
+        return self.__money_left
     
-    @property
-    def cvc(self):
-        return self.__cvc
-    
-    @property
-    def expiration(self):
-        return self.__expiration
-    
-    @property
-    def card_number(self):
-        return self.__card_number
+    @money_left.setter
+    def money_left(self, new_amount):
+        print("money left setter")
+        if isinstance(new_amount, int) and new_amount >= 0:
+            self.__money_left = new_amount

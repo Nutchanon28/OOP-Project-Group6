@@ -16,8 +16,10 @@ class User:
         self.__biography = biography
         self.__location = location
         self.__website = website
-        self.__address_list = []
-        self.__creditcard_list = []
+        self.__payment_methods = []
+        self.__addresses = []
+        self.__backings = []
+        self.__notifications = []
 
     def edit_account(self, gmail, password):
         self.gmail = gmail
@@ -38,21 +40,15 @@ class User:
             if id == address.id:
                 self.__address_list.remove(address)
                 return "delete address successfully"
-
-    def get_all_address(self):
-        return self.__address_list
     
-    def create_creditcard(self, country, cvc, expiration, card_number):
-        self.__creditcard_list.append(CreditCardTransaction(country, cvc, expiration, card_number))
+    def add_payment_method(self, country, cvc, expiration, card_number):
+        self.__payment_methods.append(CreditCardTransaction(country, cvc, expiration, card_number))
 
-    def delete_creditcard(self, id):
-        for creditcard in self.__creditcard_list:
+    def delete_payment_method(self, id):
+        for creditcard in self.__payment_methods:
             if id == creditcard.id:
-                self.__creditcard_list.remove(creditcard)
+                self.__payment_methods.remove(creditcard)
                 return "delete creditcard successfully"
-
-    def get_all_creditcard(self):
-        return self.__creditcard_list
     
     @property
     def id(self):
@@ -87,12 +83,12 @@ class User:
         return self.__website
     
     @property
-    def address_list(self):
-        return self.__address_list
+    def addresses(self):
+        return self.__addresses
     
     @property
-    def creditcard_list(self):
-        return self.__creditcard_list
+    def payment_methods(self):
+        return self.__payment_methods
     
     @gmail.setter
     def gmail(self, new_gmail):
