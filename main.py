@@ -6,6 +6,8 @@ from project import Project
 from system import System
 from user import User
 from credit_card_transaction import CreditCardTransaction
+from update import Update
+from notification import Notification
 
 import json
 from datetime import datetime
@@ -92,18 +94,18 @@ project_travel_blog.add_reward(
     100,
 )
 system.launch_project(project_travel_blog)
-project_travel_blog.add_update(
-    "finished deal with publisher", 
-    user_bob, 
-    "make a big deal to print out 500 books in July in budget of 100 baht each", 
-    "publisher.png"
-)
-project_travel_blog.add_update(
-    "plan the place to go in July", 
-    user_bob, 
-    "70% of plan has finished even how much expen", 
-    "publisher.png"
-)
+# project_travel_blog.add_update(
+#     "finished deal with publisher", 
+#     user_bob, 
+#     "make a big deal to print out 500 books in July in budget of 100 baht each", 
+#     "publisher.png"
+# )
+# project_travel_blog.add_update(
+#     "plan the place to go in July", 
+#     user_bob, 
+#     "70% of plan has finished even how much expen", 
+#     "publisher.png"
+# )
 # John create a project "clean air for all"
 project_clean_air = Project(
     "clean air for all",
@@ -224,8 +226,8 @@ user_jame.back_project(project_clean_air, user_jame.payment_methods[0], project_
 user_jame.back_project(project_green_energy, user_jame.payment_methods[1], project_clean_air.pledge_rewards[0],1000)
 user_jame.back_project(project_music_festival, user_jame.payment_methods[2], project_clean_air.pledge_rewards[0],1000)
 
-project_clean_air.add_update("survey area fo starting project", user_john, "surveying results are around Bankok and Pathumthani", "https://www.kaohoon.com/wp-content/uploads/2023/01/2023-01-05_%E0%B8%81%E0%B8%97%E0%B8%A1.-%E0%B9%80%E0%B8%95%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%A1%E0%B9%80%E0%B8%9D%E0%B9%89%E0%B8%B2%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B1%E0%B8%87%E0%B8%9D%E0%B8%B8%E0%B9%88%E0%B8%99-PM2.5.jpg")
-project_clean_air.add_update("start build air cleaner module", user_john, "build module for install as a part of machiene", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHDzGvUUUnCJnkDfJlzC87Y9S6Tosn5z6sqA&usqp=CAU")
+# project_clean_air.add_update("survey area fo starting project", user_john, "surveying results are around Bankok and Pathumthani", "https://www.kaohoon.com/wp-content/uploads/2023/01/2023-01-05_%E0%B8%81%E0%B8%97%E0%B8%A1.-%E0%B9%80%E0%B8%95%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%A1%E0%B9%80%E0%B8%9D%E0%B9%89%E0%B8%B2%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B1%E0%B8%87%E0%B8%9D%E0%B8%B8%E0%B9%88%E0%B8%99-PM2.5.jpg")
+# project_clean_air.add_update("start build air cleaner module", user_john, "build module for install as a part of machiene", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHDzGvUUUnCJnkDfJlzC87Y9S6Tosn5z6sqA&usqp=CAU")
 
 app = FastAPI()
 
@@ -285,7 +287,11 @@ async def get_all_project() -> list:
 async def get_backed_project(user_id: int) -> list:
     # SD: View Backed Project??
     current_user = system.get_user_from_id(user_id)
-    projects = current_user.get_backed_project()
+    projects_id = current_user.get_backed_project_id()
+    projects = []
+    for project_id in projects_id:
+        project = system.get_project_from_id(project_id)
+        projects.append(project)
     projects_detail = []
     for project in projects:
         projects_detail.append(
@@ -309,7 +315,8 @@ async def get_user_notifications(user_id: int) -> list:
     for notification in notifications:
         notifications_detail.append(
             {
-                "sender": notification.sender.name,
+                "actor": notification.actor.name,
+                "project": notification.project,
                 "title": notification.title,
                 "detail": notification.detail
             }
@@ -360,14 +367,14 @@ async def show_payment_requirements(project_id: int, user_id: int) -> dict:
 
 
 @app.post("/back_the_project", tags=["Back the Project"])
-async def back_the_project(
-    project_id: int,
-    user_id: int,
-    reward_id: int,
-    credit_card_id: int,
-    bonus_cost: Union[int, None] = 0,
-) -> dict:
+async def back_the_project(input: dict) -> dict:
     # SD: Back the Project
+    user_id = input["user_id"]
+    project_id = input["project_id"]
+    credit_card_id = input["credit_card_id"]
+    reward_id = input["reward_id"]
+    bonus_cost = input["bonus_cost"]
+
     current_user = system.get_user_from_id(user_id)
     selected_project = system.get_project_from_id(project_id)
     credit_card = current_user.get_credit_card_from_id(credit_card_id)
@@ -375,22 +382,53 @@ async def back_the_project(
     response = current_user.back_project(
         selected_project, credit_card, reward, bonus_cost
     )
+
+    backer = []
+    backer.append(current_user)
+    noti_for_backer = system.create_notification(
+        current_user, 
+        "has backed", 
+        selected_project, 
+        reward.reward_goal + bonus_cost, 
+        ""
+    )
+    creator = []
+    creator.append(selected_project.project_creator)
+    noti_for_creator = system.create_notification(
+        current_user, 
+        "received", 
+        selected_project, 
+        reward.reward_goal + bonus_cost, 
+        ""
+    )
+    system.send_notification(backer, noti_for_backer)
+    system.send_notification(creator, noti_for_creator)
     return {"response": response}
 
 @app.post("/add_update", tags=["Add Update"])
-async def add_update(
-    project_id: int,
-    user_id: int,
-    update_title: str,
-    update_detail: str,
-    update_image: str,
-) -> dict:
+async def add_update(input: dict) -> dict:
+    project_id = input["project_id"]
+    user_id = input["user_id"]
+    update_title = input["update_title"]
+    update_detail = input["update_detail"]
+    update_image = input["update_image"]
     # SD: Add Update
     current_user = system.get_user_from_id(user_id)
     selected_project = system.get_project_from_id(project_id)
-    response = selected_project.add_update(
-        update_title, current_user.name, update_detail, update_image
+    new_update = Update(update_title, current_user, update_detail, update_image)
+    selected_project.add_update(new_update)
+    backers = []
+    for backing in selected_project.backings:
+        backer = system.get_user_from_id(backing.backer_id)
+        backers.append(backer)
+    noti_for_backer = Notification(
+        current_user,
+        selected_project,
+        "new update on project you backed",
+        str(current_user.name) + " have posted '" + str(update_title) + "' on '" + str(selected_project.project_name) +"'"
     )
+    system.send_notification(backers, noti_for_backer)
+    response = selected_project.get_project_detail()["updates"]
     return {"response": response}
 
 

@@ -1,7 +1,6 @@
 from pledge_reward import PledgeReward
 from comment import Comment
 from update import Update
-from notification import Notification
 
 
 class Project:
@@ -112,28 +111,9 @@ class Project:
     ):
         pass
       
-    def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail ,update_image)
+    def add_update(self, new_update):
         self.__updates.append(new_update)
-        update_detail = new_update.get_update_detail()
-        receiver = []
-        for backing in self.__backings:
-            receiver.append(backing.backer)
-        new_notification = Notification(
-            update_creator,
-            "have new update on your backed project: " + str(self.__project_name), 
-            "new update: " + str(update_detail["update_title"]) + "\n" + "detail:" + str(update_detail["update_detail"]) + "\n"
-            )
-        self.send_notification(
-            receiver, 
-            new_notification
-            )
         return new_update
-    
-    def send_notification(self, send_to, new_notification):
-        for user in send_to:
-            user.add_new_notification(new_notification)
-        return "send notification successful"
     
     def create_comment(self, sending_time, text, writer):
         new_comment = Comment(sending_time, text, writer)
@@ -200,3 +180,8 @@ class Project:
     @property
     def project_detail(self):
         return self.__project_detail
+
+    @property
+    def backings(self):
+        return self.__backings
+    

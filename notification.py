@@ -1,16 +1,17 @@
 class Notification:
-    def __init__(self, sender, title, detail):
-        self.__sender = sender
+    def __init__(self, actor, project, title, detail):
+        self.__actor = actor
+        self.__project = project
         self.__title = title
         self.__detail = detail
         
     @property
-    def sender(self):
-        return self.__sender
+    def actor(self):
+        return self.__actor
     
     @property
-    def sender_name(self):
-        return self.__sender.name
+    def project(self):
+        return self.__project
         
     @property
     def title(self):

@@ -29,7 +29,6 @@ class User:
             "name": self.__name,
             "avatar": self.__avatar,
             "biography": self.__biography,
-            "location": self.__location,
             "website": self.__website
         }
         return creator_detail
@@ -39,13 +38,13 @@ class User:
             new_amount = credit_card.money_left - pledge_reward.reward_goal - bonus_cost
             credit_card.money_left = new_amount
             print(f"lose {pledge_reward.reward_goal} bath from {credit_card}")
-            new_backing = Backing(self, project, pledge_reward, pledge_reward.reward_goal, bonus_cost) #pass self instead of self.id bc. its difficult to use
+            new_backing = Backing(self.id, project.id, pledge_reward, pledge_reward.reward_goal, bonus_cost) #pass self instead of self.id bc. its difficult to use
             self.__backings.append(new_backing)
             project.add_backing(new_backing)
             return "successful backing, money left = " + str(credit_card.money_left)
         else:
             return "insufficient fund"
-
+        
     def add_address(self, country, address_nickname, full_name, address, city, phone_number):
         new_address = Address(country, address_nickname, full_name, address, city, phone_number)
         self.__addresses.append(new_address)
@@ -61,11 +60,11 @@ class User:
                 return credit_card
         return "credit card not found"
 
-    def get_backed_project(self):
-        backed_projects = []
+    def get_backed_project_id(self):
+        backed_projects_id = []
         for backing in self.__backings:
-            backed_projects.append(backing.project)
-        return backed_projects
+            backed_projects_id.append(backing.project_id)
+        return backed_projects_id
     
     @property
     def notifications(self):
@@ -122,15 +121,7 @@ class User:
     @biography.setter
     def biography(self, biography):
         self.__biography = biography
-    
-    @property
-    def location(self):
-        return self.__location
-    
-    @location.setter
-    def location(self, location):
-        self.__location = location
-    
+        
     @property
     def website(self):
         return self.__website
