@@ -5,7 +5,7 @@ class Backing:
         self.__reward_item = reward_item
         self.__reward_cost = reward_cost
         self.__bonus_cost = bonus_cost
-        
+
     @property
     def backer_id(self):
         return self.__backer_id
@@ -17,11 +17,11 @@ class Backing:
     @property
     def reward_cost(self):
         return self.__reward_cost
-
+    
     @property
     def project_id(self):
         return self.__project_id
-    
+
     @reward_cost.setter
     def reward_cost(self, value):
         if value >= 0:
@@ -39,5 +39,3 @@ class Backing:
             self.__bonus_cost = value
         else:
             raise ValueError("Bonus cost cannot be negative")
-
-    

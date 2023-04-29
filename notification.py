@@ -1,3 +1,4 @@
+
 class Notification:
     def __init__(self, actor, project, title, detail):
         self.__actor = actor

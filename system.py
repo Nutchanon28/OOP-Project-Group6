@@ -12,23 +12,44 @@ class System:
         if isinstance(user, User):
             self.__user_list.append(user)
 
+    def add_project(self, project):
+        self.__project_list.append(project)
+
     # system's method (view project)
     def get_user_from_id(self, id):
         for user in self.__user_list:
             if user.id == id:
                 return user
         return "user not found"
-    
+        
     # system's method (view project)
     def get_project_from_id(self, id):
         for project in self.__launched_projects:
             if project.id == id:
                 return project
+                # Rew: get creator's projects
+        """for project in self.__project_list:
+            if project.id == id:
+                return project"""
         return "project not found"
 
-    def delete_project(self, project):
-        if project in self.__project_list:
-            self.__project_list.remove(project)
+    def get_my_projects(self, creator_id):
+        my_projects = []
+        for project in self.__project_list:
+            if project.project_creator.id == creator_id:
+                my_projects.append(project)
+
+        return my_projects
+
+    def delete_project(self, project_id):
+        for project in self.__project_list:
+            if project_id == project.id:
+                self.__project_list.remove(project)
+                return "remove successfully"
+        for project in self.__launched_projects:
+            if project_id == project.id:
+                self.__launched_projects.remove(project)
+                return "remove successfully"
 
     def launch_project(self, project):
         if isinstance(project, Project):
@@ -44,6 +65,7 @@ class System:
                 searched_projects.append(project)
         return searched_projects
 
+    # This should be changed in some way, it's just wrong, so so wrong like, it's straight up sinning.
     def create_notification(self, actor, type, project, amount, more_detail):
         if (type == "has backed"):
             new_notification = Notification(
@@ -77,11 +99,12 @@ class System:
     @property
     def project_list(self):
         return self.__project_list
-    
+
     @property
     def user_list(self):
         return self.__user_list
-    
+
     @property
     def launched_projects(self):
         return self.__launched_projects
+
