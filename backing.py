@@ -5,7 +5,7 @@ class Backing:
         self.__reward_item = reward_item
         self.__reward_cost = reward_cost
         self.__bonus_cost = bonus_cost
-    
+
     @property
     def backer_id(self):
         return self.__backer_id

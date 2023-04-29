@@ -92,12 +92,6 @@ class Project:
             "comments": comments_list,
         }
 
-    def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator,
-                            update_detail, update_image)
-        self.__updates.append(new_update)
-        return "finished add update"
-
     def get_creator_detail(self):
         pass
 
@@ -115,11 +109,23 @@ class Project:
         self.__comments.append(new_comment)
         return "comment successful"
 
-    def create_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail, update_image)
+    def verify_creator_detail(
+        self,
+        legal_first_name,
+        legal_last_name,
+        email_address,
+        date_of_birth,
+        home_address,
+        city,
+        state,
+        postal_code,
+        phone_number,
+    ):
+        pass
+      
+    def add_update(self, new_update):
         self.__updates.append(new_update)
-        # print(f"title: {new_update.update_title} \ncreator: {new_update.update_creator} \ndetail: {new_update.update_detail} \nimage: {new_update.update_image}")
-        return "finished add update"
+        return new_update
     
     def get_reward_from_id(self, id):
         for pledge_reward in self.__pledge_rewards:
@@ -127,43 +133,11 @@ class Project:
                 return pledge_reward
         return "reward not found"
 
-    def get_reward_from_id(self, id):
-        for reward in self.__pledge_rewards:
-            print(f"id = {id} reward_id = {reward.id}")
-            if reward.id == id:
-                return reward
-
     def delete_reward(self, reward_id):
         for reward in self.__pledge_rewards:
             if reward.id == reward_id:
                 self.__pledge_rewards.remove(reward)
                 return f"remove reward with id {reward_id} success!"
-            
-    def add_update(self, update_title, update_creator, update_detail, update_image):
-        new_update = Update(update_title, update_creator, update_detail ,update_image)
-        self.__updates.append(new_update)
-        update_detail = new_update.get_update_detail()
-        receiver = []
-        for backing in self.__backings:
-            print("backing = ", backing)
-            receiver.append(backing.backer)
-        # TODO: ใส่ User ทั้ง class เป็น receiver จะทำให้เกิด recursion, แก้ให้ใส่ id แทน
-        new_notification = Notification(
-            update_creator,
-            "have new update on your backed project: " + str(self.__project_name), 
-            "new update: " + str(update_detail["update_title"]) + "\n" + "detail:" + str(update_detail["update_detail"]) + "\n"
-            )
-        self.send_notification(
-            receiver, 
-            new_notification
-            )
-        return new_update
-    
-    def send_notification(self, send_to, new_notification):
-        print(send_to)
-        for user in send_to:
-            user.add_new_notification(new_notification)
-        return "send notification successful"
                 
     @property
     def project_detail(self):
@@ -226,6 +200,10 @@ class Project:
             self.__pledge_received = new_value
 
     @property
+    def backings(self):
+        return self.__backings
+    
+    @property
     def credit_card(self):
         return self.__credit_card
 
@@ -253,4 +231,3 @@ class Project:
     
     def number_of_backings(self):
         return len(self.__backings)
-

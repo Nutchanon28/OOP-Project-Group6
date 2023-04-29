@@ -61,7 +61,6 @@ class User:
             "name": self.__name,
             "avatar": self.__avatar,
             "biography": self.__biography,
-            "location": self.__location,
             "website": self.__website
         }
         return creator_detail
@@ -96,12 +95,11 @@ class User:
                 return credit_card
         return "credit card not found"
 
-    def get_backed_project(self):
-        # TODO: recursion bug
-        backed_projects = []
+    def get_backed_project_id(self):
+        backed_projects_id = []
         for backing in self.__backings:
-            backed_projects.append(backing.project)
-        return backed_projects
+            backed_projects_id.append(backing.project_id)
+        return backed_projects_id
     
     def add_new_notification(self, new_notification):
         self.__notifications.append(new_notification)
