@@ -58,6 +58,20 @@ user_bob = User(
 )
 system.add_user(user_bob)
 
+user_anne = User(
+    "Anne@gmail.com",
+    "4567",
+    "Anne",
+    "face_photo",
+    "Do you want to do this?",
+    "Thailand", 
+    "bobadventures.com",
+)
+system.add_user(user_anne)
+user_anne.add_payment_method("USA", "000", "0000", "0000")
+user_anne.add_payment_method("USA", "123", "0000", "0000")
+user_anne.add_payment_method("USA", "456", "0000", "0000")
+
 project_vr_game = Project(
     "Virtual Reality Game",
     "gaming",
@@ -67,6 +81,8 @@ project_vr_game = Project(
     10000,
 )
 project_vr_game.project_detail = "abcdef"
+
+system.add_project(project_vr_game)
 
 thailand = RewardShipping("20-4-2023", ["Bankok", "A", "B", "C"])
 project_vr_game.add_reward(
@@ -310,6 +326,11 @@ async def get_project_list() -> list:
     projects = system.project_list
     return projects
 
+@app.get("/get_project_credit_card/{project_id}", tags=["Project"])
+async def get_project_credit_card(project_id: int):
+    project = system.get_project_in_project_list_from_id(project_id)
+    return project.credit_card
+
 
 @app.get("/view_backed_project", tags=["Backed Project"])
 async def get_backed_project(user_id: int) -> list:
@@ -357,7 +378,7 @@ async def get_user_notifications(user_id: int) -> list:
 async def get_project(project_id: int) -> dict:
     # SD: View Project
     # User select a project
-    selected_project = system.get_project_from_id(project_id)
+    selected_project = system.get_project_in_project_list_from_id(project_id)
     project_detail = selected_project.get_project_detail()
     return project_detail
 
@@ -439,7 +460,7 @@ async def back_the_project(input: dict) -> dict:
 
 @app.get("/pledge_reward/{project_id}", tags=["Pledge Reward"])
 async def get_pledge_reward(project_id: int) -> list:
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     rewards = project.pledge_rewards
     return rewards
     # reward_detail = project.get_pledge_reward_detail()
@@ -448,14 +469,28 @@ async def get_pledge_reward(project_id: int) -> list:
 
 @app.get("/view_all_project/{project_id}/get_reward_id", tags=["Pledge Reward"])
 async def get_reward_id(project_id: int) -> dict:
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     return {"id": str(len(project.pledge_rewards) + 1)}
 
 
 @app.get("/get_last_project")
 async def get_last_project():
     project = system.project_list
-    return project[-1]
+    return {
+        "id": project[-1].id,
+        "detail": project[-1].get_project_detail()
+    }
+
+@app.get("/get_last_reward_id/{project_id}", tags = ["Pledge reward"])
+async def get_last_reward_id(project_id: int) -> dict:
+    project = system.get_project_in_project_list_from_id(project_id)
+    last_reward_id = project.get_last_reward().id
+    return {"id": last_reward_id}
+
+@app.get("/get_my_project/{user_id}", tags=["Project"])
+async def get_my_project(user_id: int) -> list:
+    my_projects = system.get_my_projects(user_id)
+    return my_projects
 
 
 @app.post("/add_project", tags=["Add Project"])
@@ -475,7 +510,7 @@ async def add_the_project(project_dict: dict) -> str:
 
 @app.post("/edit_project/{project_id}/add_pledge_reward", tags=["Pledge Reward"])
 async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     project.add_reward(
         pledge_reward["_PledgeReward__reward_goal"],
         pledge_reward["_PledgeReward__reward_name"],
@@ -488,39 +523,20 @@ async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
     return f"Add reward to project id {project_id}"
 
 
-@app.put("/edit_project/{project_id}/add_credit_card", tags=["Project"])
-async def add_credit_card(project_id: int, credit_card: dict) -> str:
-    # SD Set Payment Detail
-    project = system.get_project_from_id(project_id)
-    """
-    {
-        "legal_first_name": "Anne",
-        "legal_last_name": "Jukrajuthatip",
-        "email_address": "Anne@mou.ac.th",
-        "date_of_birth": {"date": 1, "month": 1, "year": 2000},
-        "home_address": "999/99",
-        "city": "Newyork",
-        "state": "USA",
-        "postal_code": "65140",
-        "phone_number": "0999999999",
-        "account_number": "123456789",
-        "bank": "muo bank"
-    }
-    """
-    new_credit_card = CreditCardTransaction(
-        credit_card["country"],
-        credit_card["cvc"],
-        credit_card["expiration"],
-        credit_card["card_number"],
-    )
-    project.credit_card = new_credit_card
+@app.put("/edit_project/{project_id}/add_credit_card/{user_id}", tags=["Project"])
+async def add_credit_card(project_id: int, user_id: int, credit_card: dict) -> str:
+    #SD Set Payment Detail
+    project = system.get_project_in_project_list_from_id(project_id)
+    user = system.get_user_from_id(user_id)
+    credit_cards = user.payment_methods
+    project.credit_card = credit_cards[credit_card["idx"]]
     return "yess"
 
 
 @app.put("/set_description/{id}", tags=["Edit Project"])
 async def set_project_desscription(id: int, new_description: str) -> str:
     # SD Set Description เค้ายุบไปรวมกับ Edit Project
-    project = system.get_project_from_id(id)
+    project = system.get_project_in_project_list_from_id(id)
     project.project_detail = new_description
     return f"The project with id {id} was edited!"
 
@@ -529,7 +545,7 @@ async def set_project_desscription(id: int, new_description: str) -> str:
 async def edit_project(project_id: int, new_project: dict) -> str:
     # SD Edit Project
     print(new_project)
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     project.project_name = new_project["_Project__project_name"]
     project.category = new_project["_Project__category"]
     project.project_image = new_project["_Project__project_image"]
@@ -543,7 +559,7 @@ async def edit_project(project_id: int, new_project: dict) -> str:
     "/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"]
 )
 async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     reward = project.get_reward_from_id(reward_id)
     reward.reward_goal = int(new_reward["_PledgeReward__reward_goal"])
     reward.reward_name = new_reward["_PledgeReward__reward_name"]
@@ -554,8 +570,6 @@ async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
     reward.reward_shipping = RewardShipping(
         new_reward["_RewardShipping__estimated_delivery"],
         new_reward["_RewardShipping__ships_to"],
-        new_reward["_RewardShipping__address"],
-        int(new_reward["_RewardShipping__shipping_cost"]),
     )
     return "yessssssss"
 
@@ -563,7 +577,7 @@ async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
 @app.post("/launch_project", tags=["Launch Project"])
 async def launch_project(id: int) -> str:
     # SD: Launch Project
-    project = system.get_project_from_id(id)
+    project = system.get_project_in_project_list_from_id(id)
     system.launch_project(project)
     return f"The project with id{id} was launched"
 
@@ -572,7 +586,7 @@ async def launch_project(id: int) -> str:
     "/edit_project/{project_id}/delete_reward/{reward_id}", tags=["Pledge Reward"]
 )
 async def edit_reward(project_id: int, reward_id: int) -> str:
-    project = system.get_project_from_id(project_id)
+    project = system.get_project_in_project_list_from_id(project_id)
     project.delete_reward(reward_id)
     return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
 

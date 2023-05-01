@@ -213,8 +213,7 @@ class Project:
 
     @project_name.setter
     def project_name(self, new_project_name):
-        if isinstance(new_project_name):
-            self.__project_name = new_project_name
+        self.__project_name = new_project_name
 
     @category.setter
     def category(self, new_category):

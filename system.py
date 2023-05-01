@@ -32,6 +32,12 @@ class System:
             if project.id == id:
                 return project"""
         return "project not found"
+    
+    def get_project_in_project_list_from_id(self, id):
+        for project in self.__project_list:
+            print(f"{id} {project.id}")
+            if project.id == id:
+                return project
 
     def get_my_projects(self, creator_id):
         my_projects = []
