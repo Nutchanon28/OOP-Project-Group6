@@ -1,7 +1,8 @@
 class Backing:
-    def __init__(self, backer, project, reward_item, reward_cost, bonus_cost):
-        self.__backer = backer
-        self.__project = project
+    def __init__(self, backer_id, project_id, reward_item, reward_cost, bonus_cost):
+        #edittttttt
+        self.__backer_id = backer_id
+        self.__project_id = project_id
         self.__reward_item = reward_item
         self.__reward_cost = reward_cost
         self.__bonus_cost = bonus_cost
@@ -15,8 +16,8 @@ class Backing:
         return self.__reward_cost
 
     @property
-    def project(self):
-        return self.__project
+    def project_id(self):
+        return self.__project_id
     
     @reward_cost.setter
     def reward_cost(self, value):

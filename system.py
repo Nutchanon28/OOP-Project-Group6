@@ -1,6 +1,7 @@
 from project import Project
 from user import User
 
+
 class System:
     def __init__(self):
         self.__project_list = []
@@ -26,14 +27,15 @@ class System:
         for project in self.__launched_projects:
             if project.id == id:
                 return project
-        # Rew
-        """for project in self.__project_list:
+        
+    #editttttttttttttttttttttttt
+    def get_project_in_project_list_from_id(self, id):
+        for project in self.__project_list:
+            print(f"{id} {project.id}")
             if project.id == id:
                 return project
-        return "project not found"""
 
     # rew : get creator's projects
-
     def get_my_projects(self, creator_id):
         my_projects = []
         for project in self.__project_list:
@@ -80,10 +82,6 @@ class System:
     def user_list(self):
         return self.__user_list
 
-    @property
-    def user_list(self):
-        return self.__user_list
-    
     @property
     def launched_projects(self):
         return self.__launched_projects

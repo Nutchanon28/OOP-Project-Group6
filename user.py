@@ -18,6 +18,7 @@ class User:
         self.__location = location
         self.__website = website
         self.__payment_methods = []
+        self.__credit_card_list = []
         self.__addresses = []
         self.__backings = []
         self.__notifications = []
@@ -39,7 +40,8 @@ class User:
             new_amount = credit_card.money_left - pledge_reward.reward_goal - bonus_cost
             credit_card.money_left = new_amount
             print(f"lose {pledge_reward.reward_goal} bath from {credit_card}")
-            new_backing = Backing(self.id, project, pledge_reward, pledge_reward.reward_goal, bonus_cost)
+            #editttttttttttttttttttt
+            new_backing = Backing(self.id, project.id, pledge_reward, pledge_reward.reward_goal, bonus_cost)
             self.__backings.append(new_backing)
             project.add_backing(new_backing)
             return "successful backing, money left = " + str(credit_card.money_left)
@@ -51,12 +53,16 @@ class User:
         self.__addresses.append(new_address)
         return "finished add address"
 
+    #editttttttttt
+    def create_creditcard(self, country, cvc, expiration, card_number):
+        self.__credit_card_list.append(CreditCardTransaction(country, cvc, expiration, card_number))
+
     def add_payment_method(self, country, cvc, expiration, card_number):
         new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)
         self.__payment_methods.append(new_credit_card)
     
     def get_credit_card_from_id(self, id):
-        for credit_card in self.__payment_methods:
+        for credit_card in self.__credit_card_list:
             if credit_card.id == id:
                 return credit_card
         return "credit card not found"
@@ -67,13 +73,21 @@ class User:
             backed_projects.append(backing.project)
         return backed_projects
     
+    def get_all_credit_card(self):
+        return self.__payment_methods
+        #return self.__credit_card_list
+    
+    @property
+    def payment_methods(self):
+        return self.__payment_methods
+    
     @property
     def notifications(self):
         return self.__notifications
     
     @property
-    def payment_methods(self):
-        return self.__payment_methods
+    def credit_card_list(self):
+        return self.__credit_card_list
     
     @property
     def addresses(self):
@@ -134,4 +148,3 @@ class User:
     @website.setter
     def website(self, website):
         self.__website = website
-
