@@ -16,23 +16,23 @@ from datetime import datetime
 
 system = System()
 user_jame = User(
-    "Jame@gmail.com", 
-    "1234", 
-    "Jame", 
-    "https://1734811051.rsc.cdn77.org/data/images/full/393261/discord-avatars-now-usable-for-premium-nitro-tier-subscribers-plus-scheduled-events-feature.jpg", 
+    "Jame@gmail.com",
+    "1234",
+    "Jame",
+    "https://1734811051.rsc.cdn77.org/data/images/full/393261/discord-avatars-now-usable-for-premium-nitro-tier-subscribers-plus-scheduled-events-feature.jpg",
     "Thailand",
-    "Just a simple guy", 
-    "jame_project.com"
+    "Just a simple guy",
+    "jame_project.com",
 )
 system.add_user(user_jame)
 user_john = User(
-    "John@gmail.com", 
-    "2345", 
-    "John", 
-    "https://cdn.nerdschalk.com/wp-content/uploads/2023/02/why-is-discord-avatar-blurry.png", 
-    "Founder of clean air for all", 
+    "John@gmail.com",
+    "2345",
+    "John",
+    "https://cdn.nerdschalk.com/wp-content/uploads/2023/02/why-is-discord-avatar-blurry.png",
+    "Founder of clean air for all",
     "Thailand",
-    "clean_air.com"
+    "clean_air.com",
 )
 system.add_user(user_john)
 
@@ -64,7 +64,7 @@ user_anne = User(
     "Anne",
     "face_photo",
     "Do you want to do this?",
-    "Thailand", 
+    "Thailand",
     "bobadventures.com",
 )
 system.add_user(user_anne)
@@ -257,9 +257,24 @@ user_jame.add_payment_method("Thailand", "000", "06/25", "420694206928")
 user_jame.add_payment_method("Thailand", "001", "06/25", "320694206928")
 user_jame.add_payment_method("Thailand", "002", "06/25", "220694206928")
 
-user_jame.back_project(project_clean_air, user_jame.payment_methods[0], project_clean_air.pledge_rewards[0],1000)
-user_jame.back_project(project_green_energy, user_jame.payment_methods[1], project_clean_air.pledge_rewards[0],1000)
-user_jame.back_project(project_music_festival, user_jame.payment_methods[2], project_clean_air.pledge_rewards[0],1000)
+user_jame.back_project(
+    project_clean_air,
+    user_jame.payment_methods[0],
+    project_clean_air.pledge_rewards[0],
+    1000,
+)
+user_jame.back_project(
+    project_green_energy,
+    user_jame.payment_methods[1],
+    project_clean_air.pledge_rewards[0],
+    1000,
+)
+user_jame.back_project(
+    project_music_festival,
+    user_jame.payment_methods[2],
+    project_clean_air.pledge_rewards[0],
+    1000,
+)
 
 app = FastAPI()
 
@@ -273,22 +288,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/view_user", tags=["View User"])
-async def get_user(
-    userId: Union[int, None] = 1
-) -> dict:
+async def get_user(userId: Union[int, None] = 1) -> dict:
     user = system.get_user_from_id(userId)
-    user_detail = (
-            {
-                "gmail": user.gmail,
-                "password": user.password,
-                "name": user.name,
-                "avatar": user.avatar,
-                "biography": user.biography,
-                "website": user.website
-            }
-    )
+    user_detail = {
+        "gmail": user.gmail,
+        "password": user.password,
+        "name": user.name,
+        "avatar": user.avatar,
+        "biography": user.biography,
+        "website": user.website,
+    }
     return user_detail
+
 
 @app.get("/view_all_project", tags=["View Project"])
 async def get_all_project() -> dict:
@@ -326,6 +339,7 @@ async def get_project_list() -> list:
     projects = system.project_list
     return projects
 
+
 @app.get("/get_project_credit_card/{project_id}", tags=["Project"])
 async def get_project_credit_card(project_id: int):
     project = system.get_project_in_project_list_from_id(project_id)
@@ -355,23 +369,14 @@ async def get_backed_project(user_id: int) -> list:
         )
     return projects_detail
 
+
 @app.get("/view_notifications/{user_id}", tags=["Notifications"])
 async def get_user_notifications(user_id: int) -> list:
     # SD: View Backed Project??
     current_user = system.get_user_from_id(user_id)
     notifications = current_user.notifications
-    notifications_detail = []
-    for notification in notifications:
-        notifications_detail.append(
-            {
-                "actor": notification.actor.name,
-                "project": notification.project,
-                "sender": notification.sender,
-                "title": notification.title,
-                "detail": notification.detail
-            }
-        )
-    return notifications_detail
+
+    return notifications
 
 
 @app.get("/view_project/{project_id}", tags=["View Project"])
@@ -435,26 +440,22 @@ async def back_the_project(input: dict) -> dict:
         selected_project, credit_card, reward, bonus_cost
     )
 
-    backer = []
-    backer.append(current_user)
-    noti_for_backer = system.create_notification(
-        current_user, 
-        "has backed", 
-        selected_project, 
-        reward.reward_goal + bonus_cost, 
-        ""
-    )
-    creator = []
-    creator.append(selected_project.project_creator)
-    noti_for_creator = system.create_notification(
-        current_user, 
-        "received", 
-        selected_project, 
-        reward.reward_goal + bonus_cost, 
-        ""
-    )
-    system.send_notification(backer, noti_for_backer)
-    system.send_notification(creator, noti_for_creator)
+    reward_goal = 0
+    if reward != "reward not found":
+        reward_goal = reward.reward_goal
+
+    backer_message = f"You have pledge {reward_goal + bonus_cost} Baht for {selected_project.project_name}"
+    creator_message = f"You have received {reward_goal + bonus_cost} Baht for {selected_project.project_name} from {current_user.name}"
+
+    if reward != "reward not found":
+        backer_message += f", for the reward of {reward.reward_name}"
+        creator_message += f", who are waiting for {reward.reward_name}"
+
+    backer_notification = Notification("Backing", backer_message)
+    creator_notification = Notification("Receiving", creator_message)
+
+    current_user.add_new_notification(backer_notification)
+    selected_project.project_creator.add_new_notification(creator_notification)
     return {"response": response}
 
 
@@ -476,16 +477,15 @@ async def get_reward_id(project_id: int) -> dict:
 @app.get("/get_last_project")
 async def get_last_project():
     project = system.project_list
-    return {
-        "id": project[-1].id,
-        "detail": project[-1].get_project_detail()
-    }
+    return {"id": project[-1].id, "detail": project[-1].get_project_detail()}
 
-@app.get("/get_last_reward_id/{project_id}", tags = ["Pledge reward"])
+
+@app.get("/get_last_reward_id/{project_id}", tags=["Pledge reward"])
 async def get_last_reward_id(project_id: int) -> dict:
     project = system.get_project_in_project_list_from_id(project_id)
     last_reward_id = project.get_last_reward().id
     return {"id": last_reward_id}
+
 
 @app.get("/get_my_project/{user_id}", tags=["Project"])
 async def get_my_project(user_id: int) -> list:
@@ -525,7 +525,7 @@ async def add_pledge_reward(project_id: int, pledge_reward: dict) -> str:
 
 @app.put("/edit_project/{project_id}/add_credit_card/{user_id}", tags=["Project"])
 async def add_credit_card(project_id: int, user_id: int, credit_card: dict) -> str:
-    #SD Set Payment Detail
+    # SD Set Payment Detail
     project = system.get_project_in_project_list_from_id(project_id)
     user = system.get_user_from_id(user_id)
     credit_cards = user.payment_methods
@@ -590,6 +590,7 @@ async def edit_reward(project_id: int, reward_id: int) -> str:
     project.delete_reward(reward_id)
     return f"The pledge rewards with id {reward_id} of project with id {project_id} was delete"
 
+
 @app.post("/add_update", tags=["Add Update"])
 async def add_update(input: dict) -> dict:
     project_id = input["project_id"]
@@ -602,48 +603,66 @@ async def add_update(input: dict) -> dict:
     selected_project = system.get_project_from_id(project_id)
     new_update = Update(update_title, current_user, update_detail, update_image)
     selected_project.add_update(new_update)
-    backers = []
+
+    unique_backer_ids = { 0 }
+    notification = Notification("Update", f"New update on {selected_project.project_name}!")
     for backing in selected_project.backings:
-        backer = system.get_user_from_id(backing.backer_id)
-        backers.append(backer)
-    noti_for_backer = Notification(
-        current_user,
-        selected_project,
-        "new update on project you backed",
-        str(current_user.name) + " have posted '" + str(update_title) + "' on '" + str(selected_project.project_name) +"'"
-    )
-    system.send_notification(backers, noti_for_backer)
+        unique_backer_ids.add(backing.backer_id)
+
+    for id in unique_backer_ids:
+        backer = system.get_user_from_id(id)
+        if backer == "user not found":
+            continue
+        backer.add_new_notification(notification)
+
     response = selected_project.get_project_detail()["updates"]
     return {"response": response}
 
-@app.get("/get_user", tags=['user'])
+
+@app.get("/get_user", tags=["user"])
 async def get_user(user_id: int):
     user = system.get_user_from_id(user_id)
     return user
 
-@app.put("/add_profile", tags=['profile'])
+
+@app.put("/add_profile", tags=["profile"])
 async def add_profile(user_id: int, user: dict) -> str:
     the_user = system.get_user_from_id(user_id)
-    the_user.edit_profile(user["name"], user["avatar"], user["biography"], user["location"], user["website"])
+    the_user.edit_profile(
+        user["name"],
+        user["avatar"],
+        user["biography"],
+        user["location"],
+        user["website"],
+    )
     return "edit profile success"
 
-@app.put("/add_account", tags=['account'])
+
+@app.put("/add_account", tags=["account"])
 async def add_account(user_id: int, user: dict) -> str:
     the_user = system.get_user_from_id(user_id)
     the_user.edit_account(user["gmail"], user["old_password"], user["new_password"])
     return "edit account success"
 
-@app.get("/get_payment_method", tags=['creditcard'])
+
+@app.get("/get_payment_method", tags=["creditcard"])
 async def get_creditcard(user_id: int) -> list:
     user = system.get_user_from_id(user_id)
     creditcard = user.payment_methods
     return creditcard
 
-@app.post("/add_payment_method", tags=['creditcard'])
+
+@app.post("/add_payment_method", tags=["creditcard"])
 async def add_creditcard(user_id: int, creditcard: dict) -> str:
     user = system.get_user_from_id(user_id)
-    user.add_payment_method(creditcard["country"], creditcard["cvc"], creditcard["expiration"], creditcard["card_number"])
+    user.add_payment_method(
+        creditcard["country"],
+        creditcard["cvc"],
+        creditcard["expiration"],
+        creditcard["card_number"],
+    )
     return "add payment method success"
+
 
 @app.delete("/delete_payment_method")
 async def delete_creditcard(user_id: int, creditcard_id: int) -> str:
@@ -651,20 +670,55 @@ async def delete_creditcard(user_id: int, creditcard_id: int) -> str:
     user.delete_payment_method(creditcard_id)
     return "delete payment method success"
 
-@app.get("/get_shipping_address", tags=['address'])
+
+@app.get("/get_shipping_address", tags=["address"])
 async def get_address(user_id: int) -> list:
     user = system.get_user_from_id(user_id)
     addresses = user.addresses
     return addresses
 
-@app.post("/add_shipping_address", tags=['address'])
+
+@app.post("/add_shipping_address", tags=["address"])
 async def add_address(user_id: int, address: dict) -> str:
     user = system.get_user_from_id(user_id)
-    user.create_address(address["country"], address["address_nickname"], address["full_name"], address["address"], address["city"], address["phone_number"])
+    user.create_address(
+        address["country"],
+        address["address_nickname"],
+        address["full_name"],
+        address["address"],
+        address["city"],
+        address["phone_number"],
+    )
     return "add address success"
+
 
 @app.delete("/delete_address")
 async def delete_address(user_id: int, address_id: int) -> str:
     user = system.get_user_from_id(user_id)
     user.delete_address(address_id)
     return "delete address success"
+
+
+@app.post("/add_faq", tags=["FAQ"])
+async def add_faq(input: dict) -> dict:
+    project_id = input["project_id"]
+    question = input["question"]
+    answer = input["answer"]
+
+    selected_project = system.get_project_from_id(project_id)
+    new_faq = str(question) + ":" + str(answer)
+    selected_project.add_faq(new_faq)
+
+    unique_backer_ids = { 0 }
+    notification = Notification("Update", f"New faq on {selected_project.project_name}!")
+    for backing in selected_project.backings:
+        unique_backer_ids.add(backing.backer_id)
+
+    for id in unique_backer_ids:
+        backer = system.get_user_from_id(id)
+        if backer == "user not found":
+            continue
+        backer.add_new_notification(notification)
+
+    response = selected_project.get_project_detail()["faqs"]
+    return {"response": response}
