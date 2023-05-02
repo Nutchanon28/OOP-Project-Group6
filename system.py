@@ -40,13 +40,17 @@ class System:
                 return project
 
     def get_my_projects(self, creator_id):
-        my_projects = []
-        for project in self.__project_list:
+        my_launched_projects = []
+        my_created_projects = []
+        for project in self.__launched_projects:
             if project.project_creator.id == creator_id:
-                my_projects.append(project)
+                my_launched_projects.append(project)
+        for project in self.__project_list:
+            if project not in my_launched_projects and project.project_creator.id == creator_id:
+                my_created_projects.append(project)
 
-        print(my_projects)
-        return my_projects
+        #print(my_projects)
+        return { "my_launched_projects": my_launched_projects, "my_created_projects": my_created_projects}
 
     def delete_project(self, project_id):
         for project in self.__project_list:

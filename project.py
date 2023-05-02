@@ -54,7 +54,7 @@ class Project:
         self.__backings.append(backing)
         self.pledge_received = self.pledge_received + backing.reward_cost + backing.bonus_cost
         if reward_goal != 0:
-            backing.reward_item.reward_left = backing.reward_item.reward_left - 1
+            backing.reward_item.reward_left = int(backing.reward_item.reward_left) - 1
 
     def add_faq(
         self, faq
@@ -64,6 +64,7 @@ class Project:
 
     def get_project_detail(self):
         project_detail = {
+            "id": self.id,
             "name": self.__project_name,
             "image": self.__project_image,
             "detail": self.__project_detail,

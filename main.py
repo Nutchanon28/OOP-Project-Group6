@@ -93,6 +93,9 @@ project_vr_game.add_reward(
     "20-4-2023",
     ["Bankok", "A", "B", "C"],
 )
+
+project_vr_game.get_reward_from_id(1).add_reward_include({"name": "abc", "quantity": 3})
+project_vr_game.get_reward_from_id(1).add_reward_include({"name": "def", "quantity": 4})
 project_vr_game.add_reward(
     100,
     "Custom Character",
@@ -112,7 +115,9 @@ project_vr_game.add_faq(
 
 project_vr_game.add_faq("Do you like Calculas?:no")
 
+system.add_project(project_vr_game)
 system.launch_project(project_vr_game)
+
 
 project_travel_blog = Project(
     "Around the World Travel Blog",
@@ -139,6 +144,8 @@ project_travel_blog.add_reward(
     "20-4-2023",
     ["Bankok", "A", "B", "C"],
 )
+
+system.add_project(project_travel_blog)
 system.launch_project(project_travel_blog)
 
 # John create a project "clean air for all"
@@ -162,6 +169,7 @@ project_green_energy = Project(
 )
 project_green_energy.project_detail = "Join us in our mission to create sustainable energy solutions for everyone. Our team of experts is developing innovative technologies that will revolutionize the way we generate and consume energy."
 
+system.add_project(project_green_energy)
 system.launch_project(project_green_energy)
 
 # Artificial Intelligence for Business
@@ -190,6 +198,7 @@ project_music_festival = Project(
 )
 project_music_festival.project_detail = "Join us for a weekend of live music, food, and fun in the park! Our lineup features local and national acts across a variety of genres, and all proceeds will go towards supporting the park's maintenance and community programs."
 
+system.add_project(project_music_festival)
 system.launch_project(project_music_festival)
 
 # Open Source Educational Software
@@ -203,6 +212,7 @@ project_oss_edu = Project(
 )
 project_oss_edu.project_detail = "We believe that education should be accessible to everyone. That's why we're developing a suite of open source educational software that anyone can use, modify, and share. Join us in our mission to democratize learning!"
 
+system.add_project(project_oss_edu)
 system.launch_project(project_oss_edu)
 
 # Sustainable Clothing Line
@@ -216,6 +226,7 @@ project_sustainable_clothing = Project(
 )
 project_sustainable_clothing.project_detail = "Fast fashion is taking a toll on our planet. That's why we're launching a sustainable clothing line made from eco-friendly materials and manufactured using ethical practices. Help us make fashion more sustainable!"
 
+system.add_project(project_sustainable_clothing)
 system.launch_project(project_sustainable_clothing)
 
 # Community Garden
@@ -229,6 +240,7 @@ project_community_garden = Project(
 )
 project_community_garden.project_detail = "We're transforming an empty lot in the heart of the city into a vibrant community garden. Our vision is to create a space where anyone can come to grow, learn, and connect with their neighbors. Join us in creating a more sustainable and connected community!"
 
+system.add_project(project_community_garden)
 system.launch_project(project_community_garden)
 
 # Mental Health Chatbot
@@ -242,6 +254,7 @@ project_mental_health_chatbot = Project(
 )
 project_mental_health_chatbot.project_detail = "Mental health is just as important as physical health, but many people still struggle to access the care they need. That's why we're creating a chatbot that provides personalized mental health support and resources to anyone who needs it. Help us break down barriers to care!"
 
+system.add_project(project_mental_health_chatbot)
 system.launch_project(project_mental_health_chatbot)
 
 # John added a reward
@@ -249,6 +262,7 @@ project_clean_air.add_reward(
     150, "Oxygen Tank", "It's large", 100, "20-4-2023", ["Bankok", "A", "B", "C"]
 )
 
+system.add_project(project_clean_air)
 # John lauched the project
 system.launch_project(project_clean_air)
 
@@ -383,6 +397,14 @@ async def get_user_notifications(user_id: int) -> list:
 async def get_project(project_id: int) -> dict:
     # SD: View Project
     # User select a project
+    selected_project = system.get_project_from_id(project_id)
+    project_detail = selected_project.get_project_detail()
+    return project_detail
+
+@app.get("/get_project/{project_id}", tags=["View Project"])
+async def get_the_project(project_id: int) -> dict:
+    # SD: View Project
+    # User select a project
     selected_project = system.get_project_in_project_list_from_id(project_id)
     project_detail = selected_project.get_project_detail()
     return project_detail
@@ -489,7 +511,7 @@ async def get_last_reward_id(project_id: int) -> dict:
 
 
 @app.get("/get_my_project/{user_id}", tags=["Project"])
-async def get_my_project(user_id: int) -> list:
+async def get_my_project(user_id: int) -> dict:
     my_projects = system.get_my_projects(user_id)
     return my_projects
 

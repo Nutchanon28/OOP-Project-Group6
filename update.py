@@ -9,7 +9,7 @@ class Update:
     def get_update_detail(self):
         update_detail = {
             "update_title": self.__update_title,
-            "update_creator": self.__update_creator,
+            "update_creator": self.__update_creator.name,
             "update_detail": self.__update_detail,
             "update_image": self.__update_image,
             "likes": self.__likes,
