@@ -45,6 +45,7 @@ class System:
             if project.project_creator.id == creator_id:
                 my_projects.append(project)
 
+        print(my_projects)
         return my_projects
 
     def delete_project(self, project_id):

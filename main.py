@@ -150,7 +150,7 @@ project_clean_air = Project(
     user_john,
     3300,
 )
-project_clean_air.project_detail = "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath."
+project_clean_air.project_detail = "A project by a guy who is passionate about the environment. Let's save lives by improving the air we breath. "
 # Green Energy for All
 project_green_energy = Project(
     "Green Energy for All",
@@ -435,13 +435,17 @@ async def back_the_project(input: dict) -> dict:
         selected_project, credit_card, reward, bonus_cost
     )
 
+    reward_goal = 0
+    if (reward != "reward not found"):
+        reward_goal = reward.reward_goal
+
     backer = []
     backer.append(current_user)
     noti_for_backer = system.create_notification(
         current_user, 
         "has backed", 
         selected_project, 
-        reward.reward_goal + bonus_cost, 
+        reward_goal + bonus_cost, 
         ""
     )
     creator = []
@@ -450,7 +454,7 @@ async def back_the_project(input: dict) -> dict:
         current_user, 
         "received", 
         selected_project, 
-        reward.reward_goal + bonus_cost, 
+        reward_goal + bonus_cost, 
         ""
     )
     system.send_notification(backer, noti_for_backer)
@@ -546,31 +550,33 @@ async def edit_project(project_id: int, new_project: dict) -> str:
     # SD Edit Project
     print(new_project)
     project = system.get_project_in_project_list_from_id(project_id)
-    project.project_name = new_project["_Project__project_name"]
-    project.category = new_project["_Project__category"]
-    project.project_image = new_project["_Project__project_image"]
-    project.project_duration = new_project["_Project__project_duration"]
-    project.project_detail = new_project["_Project__project_detail"]
-    project.pledge_goal = new_project["_Project__pledge_goal"]
+    project.project_name = new_project["name"]
+    project.category = new_project["category"]
+    project.project_image = new_project["image"]
+    project.project_duration = new_project["project_duration"]
+    project.project_detail = new_project["detail"]
+    project.pledge_goal = new_project["pledge_goal"]
     return f"The project with id {project_id} was edited!"
 
 
 @app.put(
     "/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"]
 )
+@app.put("/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"])
 async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
+    #edittttttttttttttt
     project = system.get_project_in_project_list_from_id(project_id)
     reward = project.get_reward_from_id(reward_id)
     reward.reward_goal = int(new_reward["_PledgeReward__reward_goal"])
     reward.reward_name = new_reward["_PledgeReward__reward_name"]
     reward.reward_detail = new_reward["_PledgeReward__reward_detail"]
+    reward.reward_left = new_reward["_PledgeReward__reward_left"]
     reward.reward_include = new_reward["_PledgeReward__reward_include"]
     reward.reward_backers = int(new_reward["_PledgeReward__reward_backers"])
-    reward.max_reward_backers = int(new_reward["_PledgeReward__max_reward_backers"])
     reward.reward_shipping = RewardShipping(
-        new_reward["_RewardShipping__estimated_delivery"],
-        new_reward["_RewardShipping__ships_to"],
-    )
+                    new_reward["_RewardShipping__estimated_delivery"],
+                    new_reward["_RewardShipping__ships_to"]
+                    )
     return "yessssssss"
 
 
@@ -614,6 +620,31 @@ async def add_update(input: dict) -> dict:
     )
     system.send_notification(backers, noti_for_backer)
     response = selected_project.get_project_detail()["updates"]
+    return {"response": response}
+
+@app.post("/add_faq", tags=["FAQ"])
+async def add_faq(input: dict) -> dict:
+    project_id = input["project_id"]
+    user_id = input["user_id"]
+    question = input["question"]
+    answer = input["answer"]
+    
+    current_user = system.get_user_from_id(user_id)
+    selected_project = system.get_project_from_id(project_id)
+    new_faq = str(question) + ":" + str(answer)
+    selected_project.add_faq(new_faq)
+    backers = []
+    for backing in selected_project.backings:
+        backer = system.get_user_from_id(backing.backer_id)
+        backers.append(backer)
+    noti_for_backer = Notification(
+        current_user,
+        selected_project,
+        "new update on project you backed",
+        str(current_user.name) + " have posted '" + "new FAQ" + "' on '" + str(selected_project.project_name) +"'"
+    )
+    system.send_notification(backers, noti_for_backer)
+    response = selected_project.get_project_detail()["faqs"]
     return {"response": response}
 
 @app.get("/get_user", tags=['user'])

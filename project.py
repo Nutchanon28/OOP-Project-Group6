@@ -132,6 +132,9 @@ class Project:
             if pledge_reward.id == id:
                 return pledge_reward
         return "reward not found"
+    
+    def get_last_reward(self):
+        return self.__pledge_rewards[-1]
 
     def delete_reward(self, reward_id):
         for reward in self.__pledge_rewards:
@@ -159,7 +162,7 @@ class Project:
     @pledge_goal.setter
     def pledge_goal(self, new_pledge_goal):
         if isinstance(new_pledge_goal, int):
-            self.__pledge_goal
+            self.__pledge_goal = new_pledge_goal
 
     @property
     def comments(self):
