@@ -54,13 +54,17 @@ class System:
 
     def delete_project(self, project_id):
         for project in self.__project_list:
+            print(f"{project_id} {project.id}")
             if project_id == project.id:
                 self.__project_list.remove(project)
-                return "remove successfully"
+                break
+            
+        print("---------------")
         for project in self.__launched_projects:
+            print(f"{project_id} {project.id}")
             if project_id == project.id:
                 self.__launched_projects.remove(project)
-                return "remove successfully"
+                break
 
     def launch_project(self, project):
         if isinstance(project, Project):

@@ -115,7 +115,6 @@ project_vr_game.add_faq(
 
 project_vr_game.add_faq("Do you like Calculas?:no")
 
-system.add_project(project_vr_game)
 system.launch_project(project_vr_game)
 
 
@@ -183,7 +182,7 @@ project_ai_business = Project(
 )
 
 system.add_project(project_ai_business)
-project_ai_business = "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams."
+project_ai_business.project_detail = "Artificial intelligence is changing the game for businesses of all sizes. Our team of experienced developers and consultants is creating cutting-edge AI solutions that will help companies streamline operations, increase efficiency, and unlock new revenue streams."
 
 system.launch_project(project_ai_business)
 
@@ -746,3 +745,9 @@ async def add_faq(input: dict) -> dict:
 
     response = selected_project.get_project_detail()["faqs"]
     return {"response": response}
+
+@app.delete("/delete_project/{project_id}", tags=["Project"])
+def delete_project(project_id: int) -> str:
+    system.delete_project(project_id)
+    return f"the project with id {project_id} was deleted!"
+
