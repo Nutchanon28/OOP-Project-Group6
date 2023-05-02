@@ -402,8 +402,6 @@ async def get_project(project_id: int) -> dict:
 
 @app.get("/get_project/{project_id}", tags=["View Project"])
 async def get_the_project(project_id: int) -> dict:
-    # SD: View Project
-    # User select a project
     selected_project = system.get_project_in_project_list_from_id(project_id)
     project_detail = selected_project.get_project_detail()
     return project_detail
