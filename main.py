@@ -84,7 +84,7 @@ project_vr_game.project_detail = "abcdef"
 
 system.add_project(project_vr_game)
 
-thailand = RewardShipping("20-4-2023", ["Bankok", "A", "B", "C"])
+thailand = RewardShipping({"month": "December", "year": "2027"}, ["Bankok", "A", "B", "C"])
 project_vr_game.add_reward(
     50,
     "Early Access",
