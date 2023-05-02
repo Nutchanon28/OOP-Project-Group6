@@ -77,7 +77,7 @@ class Project:
         creator_detail = self.__project_creator.get_creator_detail()
 
         pledge_rewards_list = [
-            reward.get_reward_detail() for reward in self.__pledge_rewards
+            reward.get_reward_detail() for reward in self.__pledge_rewards if int(reward.reward_left) > 0
         ]
         updates_list = [update.get_update_detail()
                         for update in self.__updates]

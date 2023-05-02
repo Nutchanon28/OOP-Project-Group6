@@ -27,7 +27,7 @@ class User:
         if old_password == self.__password:
             if new_password != "":
                 self.__password = new_password
-            self.gmail = gmail
+            self.__gmail = gmail
 
     def edit_profile(self, name, avatar, biography, location, website):
         self.name = name
