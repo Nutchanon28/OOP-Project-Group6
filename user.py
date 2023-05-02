@@ -84,10 +84,6 @@ class User:
         new_address = Address(country, address_nickname, full_name, address, city, phone_number)
         self.__addresses.append(new_address)
         return "finished add address"
-
-    def add_payment_method(self, country, cvc, expiration, card_number):
-        new_credit_card = CreditCardTransaction(country, cvc, expiration, card_number)
-        self.__payment_methods.append(new_credit_card)
     
     def get_credit_card_from_id(self, id):
         for credit_card in self.__payment_methods:
