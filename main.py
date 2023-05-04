@@ -548,8 +548,7 @@ async def add_credit_card(project_id: int, user_id: int, credit_card: dict) -> s
     # SD Set Payment Detail
     project = system.get_project_in_project_list_from_id(project_id)
     user = system.get_user_from_id(user_id)
-    credit_cards = user.payment_methods
-    project.credit_card = credit_cards[credit_card["idx"]]
+    project.credit_card = user.get_credit_card_from_id(credit_card["id"])
     return "yess"
 
 

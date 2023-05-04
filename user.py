@@ -89,7 +89,6 @@ class User:
         for credit_card in self.__payment_methods:
             if credit_card.id == id:
                 return credit_card
-        return "credit card not found"
 
     def get_backed_project_id(self):
         backed_projects_id = []
