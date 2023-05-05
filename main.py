@@ -306,18 +306,18 @@ app.add_middleware(
 
 @app.post("/login", tags=["Authentication"])
 async def login(user: dict) -> dict:
-    username = user["username"]
+    gmail = user["gmail"]
     password = user["password"]
     for user in system.user_list:
-        if user.name == username and user.password == password:
+        if user.gmail == gmail and user.password == password:
             return {"response": "successful", "user_id": user.id}
     return {"response": "unsuccessful"}
 
 @app.post("/register", tags=["Authentication"])
 async def login(user: dict) -> dict:
-    username = user["username"]
+    gmail = user["gmail"]
     password = user["password"]
-    new_user = User("", password, username, "", "", "", "")
+    new_user = User(gmail, password, "", "", "", "", "")
     system.add_user(new_user)
     return {"response": "successful"}
 
