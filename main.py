@@ -84,7 +84,9 @@ project_vr_game.project_detail = "abcdef"
 
 system.add_project(project_vr_game)
 
-thailand = RewardShipping({"month": "December", "year": "2027"}, ["Bankok", "A", "B", "C"])
+thailand = RewardShipping(
+    {"month": "December", "year": "2027"}, ["Bankok", "A", "B", "C"]
+)
 project_vr_game.add_reward(
     50,
     "Early Access",
@@ -291,7 +293,7 @@ user_jame.back_project(
 
 app = FastAPI()
 
-origins = ["http://localhost:3000", "localhost:3000"]
+origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -300,6 +302,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/login", tags=["Authentication"])
+async def login(user: dict) -> dict:
+    username = user["username"]
+    password = user["password"]
+    for user in system.user_list:
+        if user.name == username and user.password == password:
+            return {"response": "successful", "user_id": user.id}
+    return {"response": "unsuccessful"}
+
+@app.post("/register", tags=["Authentication"])
+async def login(user: dict) -> dict:
+    username = user["username"]
+    password = user["password"]
+    new_user = User("", password, username, "", "", "", "")
+    system.add_user(new_user)
+    return {"response": "successful"}
 
 
 @app.get("/view_user", tags=["View User"])
@@ -399,6 +419,7 @@ async def get_project(project_id: int) -> dict:
     selected_project = system.get_project_from_id(project_id)
     project_detail = selected_project.get_project_detail()
     return project_detail
+
 
 @app.get("/get_project/{project_id}", tags=["View Project"])
 async def get_the_project(project_id: int) -> dict:
@@ -577,9 +598,11 @@ async def edit_project(project_id: int, new_project: dict) -> str:
 @app.put(
     "/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"]
 )
-@app.put("/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"])
+@app.put(
+    "/edit_project/{project_id}/add_pledge_reward/{reward_id}", tags=["Pledge Reward"]
+)
 async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
-    #edittttttttttttttt
+    # edittttttttttttttt
     project = system.get_project_in_project_list_from_id(project_id)
     reward = project.get_reward_from_id(reward_id)
     reward.reward_goal = int(new_reward["_PledgeReward__reward_goal"])
@@ -589,9 +612,9 @@ async def edit_reward(project_id: int, reward_id: int, new_reward: dict) -> str:
     reward.reward_include = new_reward["_PledgeReward__reward_include"]
     reward.reward_backers = int(new_reward["_PledgeReward__reward_backers"])
     reward.reward_shipping = RewardShipping(
-                    new_reward["_RewardShipping__estimated_delivery"],
-                    new_reward["_RewardShipping__ships_to"]
-                    )
+        new_reward["_RewardShipping__estimated_delivery"],
+        new_reward["_RewardShipping__ships_to"],
+    )
     return "yessssssss"
 
 
@@ -625,8 +648,10 @@ async def add_update(input: dict) -> dict:
     new_update = Update(update_title, current_user, update_detail, update_image)
     selected_project.add_update(new_update)
 
-    unique_backer_ids = { 0 }
-    notification = Notification("Update", f"New update on {selected_project.project_name}!")
+    unique_backer_ids = {0}
+    notification = Notification(
+        "Update", f"New update on {selected_project.project_name}!"
+    )
     for backing in selected_project.backings:
         unique_backer_ids.add(backing.backer_id)
 
@@ -638,6 +663,7 @@ async def add_update(input: dict) -> dict:
 
     response = selected_project.get_project_detail()["updates"]
     return {"response": response}
+
 
 @app.get("/get_user", tags=["user"])
 async def get_user(user_id: int):
@@ -729,8 +755,10 @@ async def add_faq(input: dict) -> dict:
     new_faq = str(question) + ":" + str(answer)
     selected_project.add_faq(new_faq)
 
-    unique_backer_ids = { 0 }
-    notification = Notification("Update", f"New faq on {selected_project.project_name}!")
+    unique_backer_ids = {0}
+    notification = Notification(
+        "Update", f"New faq on {selected_project.project_name}!"
+    )
     for backing in selected_project.backings:
         unique_backer_ids.add(backing.backer_id)
 
@@ -743,8 +771,8 @@ async def add_faq(input: dict) -> dict:
     response = selected_project.get_project_detail()["faqs"]
     return {"response": response}
 
+
 @app.delete("/delete_project/{project_id}", tags=["Project"])
 def delete_project(project_id: int) -> str:
     system.delete_project(project_id)
     return f"the project with id {project_id} was deleted!"
-
